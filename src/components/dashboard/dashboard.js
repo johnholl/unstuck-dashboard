@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import '../../styles/dashboard.css'
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu, Button, Row } from 'antd';
 import { UserOutlined, ClockCircleOutlined, CalendarOutlined, FireOutlined} from '@ant-design/icons';
 import {Route, Link} from 'react-router-dom'
 import Profile from './profile'
@@ -27,7 +27,14 @@ export default function Dashboard() {
     }
 
     return(
-        <Layout>
+        <Layout style={{ background: "blue", minHeight: "calc(100vh - 10px)" }}>
+            <Header style={{justify:"end"}}>
+                    <Row align="middle" justify="end" style={{padding:20}}>
+                        <Button onClick={signOut}>Sign out</Button>
+                    </Row>
+                </Header>
+                <Layout>
+
             <Sider
                 breakpoint="lg"
                 collapsedWidth="0"
@@ -38,8 +45,6 @@ export default function Dashboard() {
                     console.log(collapsed, type);
                 }}
             >
-                <Button onClick={signOut}>Sign out</Button>
-                <div className="logo" />
                 <Menu theme="light" mode="inline" >
                     <Menu.Item key="1" icon={<UserOutlined />}>
                         <Link to="/dashboard/profile" />
@@ -59,7 +64,6 @@ export default function Dashboard() {
                     </Menu.Item>
                 </Menu>
             </Sider>
-            <Layout>
                 <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
                 <Content style={{ margin: '24px 16px 0' }}>
                     <Route path="/dashboard/profile" component={Profile} />
@@ -67,8 +71,9 @@ export default function Dashboard() {
                     <Route path="/dashboard/services" component={Services} />
                     <Route path="/dashboard/availability" component={Availability} />
                 </Content>
-                <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
             </Layout>
+            <Footer style={{ textAlign: 'center' }}>Unstuck ©2020 Created by Unstuck</Footer>
+
         </Layout>);
 
 }

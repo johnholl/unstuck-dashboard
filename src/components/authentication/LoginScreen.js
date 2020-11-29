@@ -70,7 +70,7 @@ export default function SignIn(props) {
                     },
                 ]}
             >
-                <Input onChange={event => onChangeHandler(event)}/>
+                <Input.Password onChange={event => onChangeHandler(event)}/>
             </Form.Item>
           
             <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
@@ -79,7 +79,7 @@ export default function SignIn(props) {
                 </Button>
             </Form.Item>
         </Form>
-        <p className="text-center my-3">or</p>
+        {/* <p className="text-center my-3">or</p>
         <button
           className="bg-red-500 hover:bg-red-600 w-full py-2 text-white">
           Sign in with Google
@@ -89,7 +89,7 @@ export default function SignIn(props) {
           <Link to="signUp">
             Sign up here
           </Link>{" "}
-        </p>
+        </p> */}
       </div>
     </div>
   );

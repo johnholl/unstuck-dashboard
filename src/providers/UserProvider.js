@@ -4,14 +4,14 @@ import { auth } from "../firebase";
 export const UserContext = createContext({ user: null });
 class UserProvider extends Component {
   state = {
-    user: null
+    user: "not loaded"
   };
 
   componentDidMount = () => {
     auth.onAuthStateChanged(userAuth => {
-        console.log("we changing user context");
-        console.log(userAuth);
       this.setState({ user: userAuth});
+      console.log("USERAUTH")
+      console.log(userAuth);
     });
   };
   render() {
