@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import '../../styles/dashboard.css'
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Button } from 'antd';
 import { UserOutlined, ClockCircleOutlined, CalendarOutlined, FireOutlined} from '@ant-design/icons';
 import {Route, Link} from 'react-router-dom'
 import Profile from './profile'
 import Bookings from './bookings'
 import Services from './services'
 import Availability from './availability'
+import {auth} from "../../firebase";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -20,6 +22,10 @@ export default function Dashboard() {
         setCollapsed({ collapsed });
     };
 
+    const signOut = () => {
+        auth.signOut();
+    }
+
     return(
         <Layout>
             <Sider
@@ -32,6 +38,7 @@ export default function Dashboard() {
                     console.log(collapsed, type);
                 }}
             >
+                <Button onClick={signOut}>Sign out</Button>
                 <div className="logo" />
                 <Menu theme="light" mode="inline" >
                     <Menu.Item key="1" icon={<UserOutlined />}>

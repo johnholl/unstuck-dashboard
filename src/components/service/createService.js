@@ -1,6 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import { Form, Input, InputNumber, Button } from 'antd';
 import { firestore } from "../../firebase"
+import {UserContext} from "../../providers/UserProvider";
+import {Link} from 'react-router-dom'
+
 
 const layout = {
     labelCol: {
@@ -24,20 +27,35 @@ const validateMessages = {
 
 
 
-export default function CreateService() {
-
+export default function CreateService(props) {
+    const user = useContext(UserContext);
     let [serviceInfo, setServiceInfo] = React.useState(null);
+    React.useEffect(() => {
+                    setServiceInfo({name:"", price:"", duration:"", description:"", tags:""})
+                }, []);
+
 
     const onFinish = (values) => {
-        console.log("what");
-        console.log(values);
-        firestore.collection("users").doc("lSkuPARE5Z9Eo5byvh3o").collection("services").add(values)
+        firestore.collection("users").doc(user.uid).collection("services").add(values).then(
+            () => props.history.push("/dashboard/services")
+        )
     };
+
+    if(!serviceInfo){
+        return(<div>not loaded</div>)
+    }
 
     return(
         <div style={{ padding: 24, minHeight: 360, justifyContent:'center'}}>
             <Form {...layout} name="nest-messages" 
-            onFinish={onFinish} validateMessages={validateMessages}>
+            onFinish={onFinish} validateMessages={validateMessages}
+            initialValues={{
+                name:serviceInfo.name,
+                email:serviceInfo.email,
+                headline:serviceInfo.headline,
+                description:serviceInfo.description,
+                website:serviceInfo.website,
+                tags: ""}}>
                 <Form.Item
                     name={'name'}
                     label="Name of Service"

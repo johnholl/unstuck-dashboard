@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Form, TimePicker} from 'antd';
 import {ArrowRightOutlined} from '@ant-design/icons';
 import {firestore} from "../../firebase"
 import moment from 'moment';
+import {UserContext} from "../../providers/UserProvider";
+
 
 const layout = {
     labelCol: {
@@ -31,12 +33,11 @@ function onChange(time, timeString) {
 let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 export default function Availability() {
-
     let [availability, setAvailability] = React.useState(null)
-
+    const user = useContext(UserContext);
     React.useEffect(() => {
         (async function () {
-            firestore.collection("users").doc("lSkuPARE5Z9Eo5byvh3o").collection("availability").get().then(function(querySnapshot) {
+            firestore.collection("users").doc(user.uid).collection("availability").get().then(function(querySnapshot) {
                 let av = []
                 querySnapshot.forEach(function(doc) {
                     let datkey = doc.id;
@@ -57,10 +58,10 @@ export default function Availability() {
             if(value.start !== null && value.end !== null) {
                 console.log(key);
                 console.log(value);
-            firestore.doc("users/lSkuPARE5Z9Eo5byvh3o/availability/" + key).set(
+                firestore.collection("users").doc(user.uid).collection("availability").doc(key).set(
                 {day: key, end:value.end._d, start:value.start._d})}
                 else {
-                    firestore.doc("users/lSkuPARE5Z9Eo5byvh3o/availability/" + key).delete();
+                    firestore.collection("users").doc(user.uid).collection("availability").doc(key).delete();
                 }
         });
         

@@ -1,4 +1,3 @@
-import React from 'react'
 import firebase from "firebase";
 
 const firebaseConfig = {
@@ -11,6 +10,11 @@ const firebaseConfig = {
     appId: "1:64774095156:web:868a8c970f6fb4b0f52561"
   };
 
+
 firebase.initializeApp(firebaseConfig)
 
+// firebase.auth().useEmulator('http://localhost:9099/');
+// firebase.firestore().useEmulator("localhost", 8080);
+
+export const auth = firebase.auth();
 export const firestore = firebase.firestore()

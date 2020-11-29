@@ -1,7 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import { Form, Input, InputNumber, Button } from 'antd';
 import { firestore } from "../../firebase";
 import {Redirect} from 'react-router-dom';
+import {UserContext} from "../../providers/UserProvider";
+
 
 const layout = {
     labelCol: {
@@ -26,12 +28,10 @@ const validateMessages = {
 
 
 export default function EditService(props) {
-    console.log(props);
+    const user = useContext(UserContext);
     const onFinish = (values) => {
-        console.log("what");
-        console.log(values);
-        firestore.collection("users").doc("lSkuPARE5Z9Eo5byvh3o").collection("services").doc(props.location.service.id).set(values).then(
-            () => props.history.push("/dashboard/services")
+        firestore.collection("users").doc(user.uid).collection("services").doc(props.location.service.id).set(values).then(
+            () => props.history.push("/services")
         )
         
     };

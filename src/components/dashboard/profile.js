@@ -1,7 +1,12 @@
-import React, {useEffect} from 'react';
-import { Form, Input, InputNumber, Button } from 'antd';
+import React, {useEffect, useContext} from 'react';
+import { Form, Input, InputNumber, Button, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import { firestore } from "../../firebase"
+import {UserContext} from "../../providers/UserProvider";
+import GoogleAuth from "../../utils/googleAuth"
+import sleep from "../../utils/timing"
 
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const layout = {
     labelCol: {
@@ -25,16 +30,18 @@ const validateMessages = {
 
 export default function Profile() {
     let [profileInfo, setProfileInfo] = React.useState(null);
-
+    let [updating, setUpdating] = React.useState(false);
+    const user = useContext(UserContext);
     React.useEffect(() => {
         (async function () {
-            firestore.collection("users").doc("lSkuPARE5Z9Eo5byvh3o").get().then(function(doc) {
+            firestore.collection("users").doc(user.uid).get().then(function(doc) {
                 if (doc.exists) {
                     console.log("Document data:", doc.data());
                     setProfileInfo(doc.data());
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
+                    setProfileInfo({name:"", email:"", headline:"", description:"", website:"", tags:""})
                 }
             }).catch(function(error) {
                 console.log("Error getting document:", error);
@@ -42,10 +49,10 @@ export default function Profile() {
         })();
     }, []);
 
-    const onFinish = (values) => {
-        console.log("what");
-        console.log(values);
-        firestore.collection("users").doc("lSkuPARE5Z9Eo5byvh3o").set(values)
+    async function onFinish(values) {
+        setUpdating(true);
+        await sleep(1000);
+        firestore.collection("users").doc(user.uid).set(values).then(setUpdating(false)).catch((error) => console.log(error));
     };
 
     if(!profileInfo){
@@ -99,10 +106,12 @@ export default function Profile() {
                     <Input />
                 </Form.Item>
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-                    <Button type="primary" htmlType="submit">
-                        Submit
+                    <Button type="primary" htmlType="submit" disabled={updating}>
+                        Save
                     </Button>
+                    {updating && <Spin indicator={antIcon} style={{paddingLeft:10}} />}
                 </Form.Item>
+                <GoogleAuth/>
             </Form>
         </div>
     )
