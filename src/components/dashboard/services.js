@@ -11,6 +11,7 @@ export default function Services() {
     let [deleteService, setDeleteService] = React.useState([]);
     let [visible, setVisible] = React.useState(false);
     const user = useContext(UserContext);
+    console.log("hello?");
     React.useEffect(() => {
         (async function () {
             firestore.collection("users").doc(user.uid).collection("services").get().then(function(serviceSnap) {

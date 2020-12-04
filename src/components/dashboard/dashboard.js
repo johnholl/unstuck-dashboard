@@ -27,7 +27,7 @@ export default function Dashboard() {
     }
 
     return(
-        <Layout style={{ background: "blue", minHeight: "calc(100vh - 10px)" }}>
+        <Layout style={{ background: "blue", minHeight: "calc(100vh - 10px)", overflow:"scroll" }}>
             <Header style={{justify:"end"}}>
                     <Row align="middle" justify="end" style={{padding:20}}>
                         <Button onClick={signOut}>Sign out</Button>

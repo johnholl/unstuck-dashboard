@@ -1,5 +1,5 @@
 import React, {useEffect, useContext} from 'react';
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Form, Input, InputNumber, Button, Row } from 'antd';
 import { firestore } from "../../firebase"
 import {UserContext} from "../../providers/UserProvider";
 import {Link} from 'react-router-dom'
@@ -55,6 +55,7 @@ export default function CreateService(props) {
                 headline:serviceInfo.headline,
                 description:serviceInfo.description,
                 website:serviceInfo.website,
+                duration:0,
                 tags: ""}}>
                 <Form.Item
                     name={'name'}
@@ -76,18 +77,17 @@ export default function CreateService(props) {
                         },
                     ]}
                 >
-                    <Input/>
+                <InputNumber
+                    min={0}
+                    step={5}
+                    formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    parser={value => value.replace(/\$\s?|(,*)/g, '')}/>
                 </Form.Item>
-                <Form.Item
-                    name={'duration'}
-                    label="Duration"
-                    rules={[
-                        {
-                            required: true
-                        },
-                    ]}
-                >
-                    <Input/>
+                <Form.Item label="Duration">
+                <Form.Item name="duration" noStyle>
+                <InputNumber min={0} max={360} step={5} />
+                </Form.Item>
+                <span className="ant-form-text"> minutes</span>
                 </Form.Item>
                 <Form.Item name={'description'} label="Description">
                     <Input.TextArea/>

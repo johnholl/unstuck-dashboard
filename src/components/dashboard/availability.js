@@ -5,6 +5,8 @@ import {firestore} from "../../firebase"
 import moment from 'moment';
 import {UserContext} from "../../providers/UserProvider";
 
+const {RangePicker} = TimePicker;
+
 
 const layout = {
     labelCol: {
@@ -18,8 +20,8 @@ const layout = {
 const validateMessages = {
     required: '${label} is required!',
     types: {
-        email: '${label} is not validate email!',
-        number: '${label} is not a validate number!',
+        email: '${label} is not valid email!',
+        number: '${label} is not a valid number!',
     },
     number: {
         range: '${label} must be between ${min} and ${max}',
@@ -28,6 +30,11 @@ const validateMessages = {
 
 function onChange(time, timeString) {
     console.log(time, timeString);
+}
+
+function onRangeChange(v) {
+    console.log("RANGE REPRESENTATION");
+    console.log(v);
 }
 
 let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -55,11 +62,9 @@ export default function Availability() {
 
     const onFinish = (days) => {
         Object.entries(days).forEach(([key, value]) => {
-            if(value.start !== null && value.end !== null) {
-                console.log(key);
-                console.log(value);
+            if(value.range !== null) {
                 firestore.collection("users").doc(user.uid).collection("availability").doc(key).set(
-                {day: key, end:value.end._d, start:value.start._d})}
+                {day: key, end:value.range[1]._d, start:value.range[0]._d})}
                 else {
                     firestore.collection("users").doc(user.uid).collection("availability").doc(key).delete();
                 }
@@ -79,20 +84,13 @@ export default function Availability() {
                     return(<Form.Item
                         label={day}
                         style={{ marginBottom: 0 }}>
-                            <Form.Item
-                        name={[day, 'start']}
-                        style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-                        initialValue={availability[day] ? availability[day]['start'] : null}
-                    >
-                        <TimePicker placeholder="start" use12Hours format="h:mm a" onChange={onChange} minuteStep={15} />
-                        </Form.Item>
                         <Form.Item
-                        name={[day, 'end']}
+                        name={[day, 'range']}
                         style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-                        initialValue={availability[day] ? availability[day]['end'] : null}
-                        >
-                        <TimePicker placeholder="end" use12Hours format="h:mm a" onChange={onChange} minuteStep={15} />
-                    </Form.Item></Form.Item>)
+                        initialValue={availability[day] ? [availability[day]['start'], availability[day]['end']] : null}>
+                            <RangePicker use12Hours format="h:mm a" onChange={onRangeChange} minuteStep={15}/>
+                        </Form.Item>
+                        </Form.Item>)
                 })}
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                     <Button type="primary" htmlType="submit">

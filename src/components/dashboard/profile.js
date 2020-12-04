@@ -1,6 +1,6 @@
 import React, {useEffect, useContext} from 'react';
-import { Form, Input, InputNumber, Button, Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Spin, Popover } from 'antd';
+import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from "../../firebase"
 import {UserContext} from "../../providers/UserProvider";
 import GoogleAuth from "../../utils/googleAuth"
@@ -10,10 +10,10 @@ const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const layout = {
     labelCol: {
-        span: 8,
+        span: 6,
     },
     wrapperCol: {
-        span: 16,
+        span: 12,
     },
 };
 
@@ -41,7 +41,7 @@ export default function Profile() {
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
-                    setProfileInfo({name:"", email:"", headline:"", description:"", website:"", tags:""})
+                    setProfileInfo({name:"", email:"", headline:"", description:"", website:"", videolink:""})
                 }
             }).catch(function(error) {
                 console.log("Error getting document:", error);
@@ -52,7 +52,7 @@ export default function Profile() {
     async function onFinish(values) {
         setUpdating(true);
         await sleep(1000);
-        firestore.collection("users").doc(user.uid).set(values).then(setUpdating(false)).catch((error) => console.log(error));
+        firestore.collection("users").doc(user.uid).update(values).then(setUpdating(false)).catch((error) => console.log(error));
     };
 
     if(!profileInfo){
@@ -68,7 +68,7 @@ export default function Profile() {
                 headline:profileInfo.headline,
                 description:profileInfo.description,
                 website:profileInfo.website,
-                tags: ""
+                videolink:profileInfo.videolink
                         }}
             onFinish={onFinish} validateMessages={validateMessages}>
                 <Form.Item
@@ -93,16 +93,19 @@ export default function Profile() {
                 >
                     <Input/>
                 </Form.Item>
-                <Form.Item name={'headline'} label="Headline">
+                <Form.Item name={'headline'} 
+                label={<div>Headline <Popover content="This will be displayed at the top of your profile page"><InfoCircleOutlined size="small"/></Popover></div>}>
                     <Input.TextArea/>
                 </Form.Item>
-                <Form.Item name={'description'} label="Description">
-                    <Input.TextArea/>
+                <Form.Item name={'description'}
+                label={<div>Description <Popover content="Give some more information about yourself, experience, and services"><InfoCircleOutlined size="small"/></Popover></div>}>
+                    <Input.TextArea rows={6}/>
                 </Form.Item>
                 <Form.Item name={'website'} label="Website">
                     <Input />
                 </Form.Item>
-                <Form.Item name={'tags'} label="Tags">
+                <Form.Item name={'videolink'}
+                label={<div>Youtube video <Popover content="Upload a youtube video introducing yourself, put the link here, and we'll embed it in your profile page"><InfoCircleOutlined size="small"/></Popover></div>}>
                     <Input />
                 </Form.Item>
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
@@ -111,8 +114,8 @@ export default function Profile() {
                     </Button>
                     {updating && <Spin indicator={antIcon} style={{paddingLeft:10}} />}
                 </Form.Item>
-                <GoogleAuth/>
             </Form>
+            <GoogleAuth/>
         </div>
     )
 }

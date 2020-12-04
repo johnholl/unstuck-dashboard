@@ -85,7 +85,7 @@ export default function Bookings() {
                             pathname: '/bookingInfo',
                             state: {
                                 bookingNumber: booking.id}
-                            }}>{booking.customer + " " + booking.appointment}</Link></p>  
+                            }}>{booking.customer + " at " + moment.unix(booking.appointment).format("h:mm a")}</Link></p>  
                      )
                  })}
              </Modal>
