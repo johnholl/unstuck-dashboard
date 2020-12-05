@@ -56,7 +56,7 @@ export default function Profile() {
     };
 
     if(!profileInfo){
-        return(<div>not loaded</div>)
+        return(<div></div>)
     }
 
     return(

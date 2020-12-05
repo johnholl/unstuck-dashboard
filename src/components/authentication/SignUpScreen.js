@@ -14,7 +14,6 @@ const layout = {
 };
 
 export default function SignUp(props) {
-  console.log("SWITCHED");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");

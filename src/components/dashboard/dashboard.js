@@ -14,13 +14,21 @@ const { Header, Content, Footer, Sider } = Layout;
 
 
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     let [collapsed, setCollapsed] = useState(false);
+
+    useEffect(() => {props.history.push("/dashboard/bookings")}, []);
 
     const onCollapse = collapsed => {
         console.log(collapsed);
         setCollapsed({ collapsed });
     };
+
+    const onMenuChange = (value) => {
+        console.log(value.key);
+        console.log(props);
+        props.history.push("/dashboard/" + value.key);
+    }
 
     const signOut = () => {
         auth.signOut();
@@ -45,22 +53,18 @@ export default function Dashboard() {
                     console.log(collapsed, type);
                 }}
             >
-                <Menu theme="light" mode="inline" >
-                    <Menu.Item key="1" icon={<UserOutlined />}>
-                        <Link to="/dashboard/profile" />
-                        profile
-                    </Menu.Item>
-                    <Menu.Item key="2" icon={<CalendarOutlined />}>
-                        <Link to="/dashboard/bookings" />
+                <Menu theme="light" mode="inline" defaultSelectedKeys={["bookings"]} onClick={onMenuChange}>
+                    <Menu.Item key="bookings" icon={<CalendarOutlined />}>
                         bookings
                     </Menu.Item>
-                    <Menu.Item key="3" icon={<FireOutlined />}>
-                        <Link to="/dashboard/services" />
+                    <Menu.Item key="services" icon={<FireOutlined />}>
                         services
                     </Menu.Item>
-                    <Menu.Item key="4" icon={<ClockCircleOutlined />}>
-                        <Link to="/dashboard/availability" />
+                    <Menu.Item key="availability" icon={<ClockCircleOutlined />}>
                         availability
+                    </Menu.Item>
+                    <Menu.Item key="profile" icon={<UserOutlined />}>
+                        profile
                     </Menu.Item>
                 </Menu>
             </Sider>

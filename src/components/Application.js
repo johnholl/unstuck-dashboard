@@ -36,7 +36,6 @@ export default function Application() {
       :
       <Router>
           <Switch>
-            {/* <Route path="/signUp" component={SignUpScreen}/> */}
             <Route path="/" component={LoginScreen}/>
           </Switch>
         </Router>
