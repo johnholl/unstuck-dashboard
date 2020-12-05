@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import '../../styles/dashboard.css'
-import { Layout, Menu, Button, Row } from 'antd';
+import { Layout, Menu, Button, Row, Modal } from 'antd';
 import { UserOutlined, ClockCircleOutlined, CalendarOutlined, FireOutlined} from '@ant-design/icons';
 import {Route, Link} from 'react-router-dom'
 import Profile from './profile'
@@ -16,6 +16,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 export default function Dashboard(props) {
     let [collapsed, setCollapsed] = useState(false);
+    let [visible, setVisible] = useState(false);
 
     useEffect(() => {props.history.push("/dashboard/bookings")}, []);
 
@@ -34,11 +35,30 @@ export default function Dashboard(props) {
         auth.signOut();
     }
 
+    const openSignOutModal = () => {
+        setVisible(true);
+
+    }
+
     return(
         <Layout style={{ background: "blue", minHeight: "calc(100vh - 10px)", overflow:"scroll" }}>
+            <Modal
+                title="Sign out"
+                visible={visible}
+                footer={[
+                    <Button key="cancel" onClick={()=>setVisible(false)}>
+                      Cancel
+                    </Button>,
+                    <Button key="signout" type="primary" onClick={signOut}>
+                      Sign Out
+                    </Button>,
+                  ]}
+                >
+                <p>Are you sure you want to delete this service?</p>
+            </Modal>
             <Header style={{justify:"end"}}>
                     <Row align="middle" justify="end" style={{padding:20}}>
-                        <Button onClick={signOut}>Sign out</Button>
+                        <Button onClick={openSignOutModal}>Sign out</Button>
                     </Row>
                 </Header>
                 <Layout>
