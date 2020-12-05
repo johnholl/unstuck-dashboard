@@ -1,103 +1,112 @@
-import React, {useState, useEffect} from 'react'
-import '../../styles/dashboard.css'
+import React, { useState, useEffect } from 'react';
+import { Route } from 'react-router-dom';
 import { Layout, Menu, Button, Row, Modal } from 'antd';
-import { UserOutlined, ClockCircleOutlined, CalendarOutlined, FireOutlined} from '@ant-design/icons';
-import {Route, Link} from 'react-router-dom'
-import Profile from './profile'
-import Bookings from './bookings'
-import Services from './services'
-import Availability from './availability'
-import {auth} from "../../firebase";
-
+import {
+  UserOutlined,
+  ClockCircleOutlined,
+  CalendarOutlined,
+  FireOutlined,
+} from '@ant-design/icons';
+import '../../styles/dashboard.css';
+import { auth } from '../../firebase';
+import Profile from './profile';
+import Bookings from './bookings';
+import Services from './services';
+import Availability from './availability';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-
-
 export default function Dashboard(props) {
-    let [collapsed, setCollapsed] = useState(false);
-    let [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-    useEffect(() => {props.history.push("/dashboard/bookings")}, []);
+  useEffect(() => {
+    props.history.push('/dashboard/bookings');
+  }, []);
 
-    const onCollapse = collapsed => {
-        console.log(collapsed);
-        setCollapsed({ collapsed });
-    };
+  const onMenuChange = (value) => {
+    props.history.push('/dashboard/' + value.key);
+  };
 
-    const onMenuChange = (value) => {
-        console.log(value.key);
-        console.log(props);
-        props.history.push("/dashboard/" + value.key);
-    }
+  const signOut = () => {
+    auth.signOut();
+  };
 
-    const signOut = () => {
-        auth.signOut();
-    }
+  const openSignOutModal = () => {
+    setVisible(true);
+  };
 
-    const openSignOutModal = () => {
-        setVisible(true);
-
-    }
-
-    return(
-        <Layout style={{ background: "blue", minHeight: "calc(100vh - 10px)", overflow:"scroll" }}>
-            <Modal
-                title="Sign out"
-                visible={visible}
-                footer={[
-                    <Button key="cancel" onClick={()=>setVisible(false)}>
-                      Cancel
-                    </Button>,
-                    <Button key="signout" type="primary" onClick={signOut}>
-                      Sign Out
-                    </Button>,
-                  ]}
-                >
-                <p>Are you sure you want to delete this service?</p>
-            </Modal>
-            <Header style={{justify:"end"}}>
-                    <Row align="middle" justify="end" style={{padding:20}}>
-                        <Button onClick={openSignOutModal}>Sign out</Button>
-                    </Row>
-                </Header>
-                <Layout>
-
-            <Sider
-                breakpoint="lg"
-                collapsedWidth="0"
-                onBreakpoint={broken => {
-                    console.log(broken);
-                }}
-                onCollapse={(collapsed, type) => {
-                    console.log(collapsed, type);
-                }}
-            >
-                <Menu theme="light" mode="inline" defaultSelectedKeys={["bookings"]} onClick={onMenuChange}>
-                    <Menu.Item key="bookings" icon={<CalendarOutlined />}>
-                        bookings
-                    </Menu.Item>
-                    <Menu.Item key="services" icon={<FireOutlined />}>
-                        services
-                    </Menu.Item>
-                    <Menu.Item key="availability" icon={<ClockCircleOutlined />}>
-                        availability
-                    </Menu.Item>
-                    <Menu.Item key="profile" icon={<UserOutlined />}>
-                        profile
-                    </Menu.Item>
-                </Menu>
-            </Sider>
-                <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
-                <Content style={{ margin: '24px 16px 0' }}>
-                    <Route path="/dashboard/profile" component={Profile} />
-                    <Route path="/dashboard/bookings" component={Bookings} />
-                    <Route path="/dashboard/services" component={Services} />
-                    <Route path="/dashboard/availability" component={Availability} />
-                </Content>
-            </Layout>
-            <Footer style={{ textAlign: 'center' }}>Unstuck ©2020 Created by Unstuck</Footer>
-
-        </Layout>);
-
+  return (
+    <Layout
+      style={{
+        background: 'blue',
+        minHeight: 'calc(100vh - 10px)',
+        overflow: 'scroll',
+      }}
+    >
+      <Modal
+        title="Sign out"
+        visible={visible}
+        footer={[
+          <Button key="cancel" onClick={() => setVisible(false)}>
+            Cancel
+          </Button>,
+          <Button key="signout" type="primary" onClick={signOut}>
+            Sign Out
+          </Button>,
+        ]}
+      >
+        <p>Are you sure you want to delete this service?</p>
+      </Modal>
+      <Header style={{ justify: 'end' }}>
+        <Row align="middle" justify="end" style={{ padding: 20 }}>
+          <Button onClick={openSignOutModal}>Sign out</Button>
+        </Row>
+      </Header>
+      <Layout>
+        <Sider
+          breakpoint="lg"
+          collapsedWidth="0"
+          onBreakpoint={(broken) => {
+            console.log(broken);
+          }}
+          onCollapse={(collapsed, type) => {
+            console.log(collapsed, type);
+          }}
+        >
+          <Menu
+            theme="light"
+            mode="inline"
+            defaultSelectedKeys={['bookings']}
+            onClick={onMenuChange}
+          >
+            <Menu.Item key="bookings" icon={<CalendarOutlined />}>
+              bookings
+            </Menu.Item>
+            <Menu.Item key="services" icon={<FireOutlined />}>
+              services
+            </Menu.Item>
+            <Menu.Item key="availability" icon={<ClockCircleOutlined />}>
+              availability
+            </Menu.Item>
+            <Menu.Item key="profile" icon={<UserOutlined />}>
+              profile
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Header
+          className="site-layout-sub-header-background"
+          style={{ padding: 0 }}
+        />
+        <Content style={{ margin: '24px 16px 0' }}>
+          <Route path="/dashboard/profile" component={Profile} />
+          <Route path="/dashboard/bookings" component={Bookings} />
+          <Route path="/dashboard/services" component={Services} />
+          <Route path="/dashboard/availability" component={Availability} />
+        </Content>
+      </Layout>
+      <Footer style={{ textAlign: 'center' }}>
+        Unstuck ©2020 Created by Unstuck
+      </Footer>
+    </Layout>
+  );
 }

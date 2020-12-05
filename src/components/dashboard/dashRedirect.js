@@ -1,6 +1,6 @@
-import {Redirect} from 'react-router-dom'
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 
-
-export default function DashRedirect(props) {
-    return(<Redirect to="/dashboard"/>)
+export default function DashRedirect() {
+  return <Redirect to="/dashboard" />;
 }
