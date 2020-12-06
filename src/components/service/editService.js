@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Form, Input, InputNumber, Button, Switch, Popover } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 
@@ -53,7 +54,7 @@ export default function EditService(props) {
           description: props.location.service.description
             ? props.location.service.description
             : '',
-          tags: props.location.service.tags ? props.location.service.tags : '',
+          autoAppt: props.location.service.autoAppt ? props.location.service.autoAppt : false,
         }}
       >
         <Form.Item
@@ -94,8 +95,14 @@ export default function EditService(props) {
         <Form.Item name={'description'} label="Description">
           <Input.TextArea />
         </Form.Item>
-        <Form.Item name={'tags'} label="Tags">
-          <Input />
+        <Form.Item name={'autoAppt'} valuePropName={props.location.service.autoAppt ? "checked" : ""} label={
+        <div>
+        Automatically accept appointments{' '}
+        <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
+          <InfoCircleOutlined size="small" />
+        </Popover>
+      </div>}>
+          <Switch />
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button type="primary" htmlType="submit">

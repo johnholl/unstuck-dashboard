@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { Form, Input, InputNumber, Button } from 'antd';
+import { Form, Input, InputNumber, Button, Switch, Popover } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 
@@ -63,7 +64,7 @@ export default function CreateService(props) {
           description: serviceInfo.description,
           website: serviceInfo.website,
           duration: 0,
-          tags: '',
+          autoAppt: true,
         }}
       >
         <Form.Item
@@ -104,8 +105,14 @@ export default function CreateService(props) {
         <Form.Item name={'description'} label="Description">
           <Input.TextArea />
         </Form.Item>
-        <Form.Item name={'tags'} label="Tags">
-          <Input />
+        <Form.Item name={'autoAppt'} label={
+        <div>
+        Automatically accept appointments{' '}
+        <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
+          <InfoCircleOutlined size="small" />
+        </Popover>
+      </div>}>
+          <Switch />
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button type="primary" htmlType="submit">
