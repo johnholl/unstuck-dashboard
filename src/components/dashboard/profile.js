@@ -39,7 +39,6 @@ export default function Profile() {
         console.log('Document data:', doc.data());
         setProfileInfo(doc.data());
       } else {
-        // doc.data() will be undefined in this case
         console.log('No such document!');
         setProfileInfo({
           name: '',
@@ -59,7 +58,7 @@ export default function Profile() {
         firestore.collection("users").doc(user.uid).set(values, {merge: true}).then(setUpdating(false)).catch((error) => console.log(error));
     };
   if (!profileInfo) {
-    return <div></div>;
+    return <div></div>
   }
 
   return (
