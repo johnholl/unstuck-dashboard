@@ -14,9 +14,6 @@ const layout = {
 };
 
 export default function SignUp(props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState(null);
 
   const onChangeHandler = event => {

@@ -52,7 +52,7 @@ export default function Profile() {
     async function onFinish(values) {
         setUpdating(true);
         await sleep(1000);
-        firestore.collection("users").doc(user.uid).update(values).then(setUpdating(false)).catch((error) => console.log(error));
+        firestore.collection("users").doc(user.uid).set(values, {merge: true}).then(setUpdating(false)).catch((error) => console.log(error));
     };
 
     if(!profileInfo){
