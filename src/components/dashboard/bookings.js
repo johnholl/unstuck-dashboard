@@ -55,7 +55,7 @@ export default function Bookings() {
 
   function dateCellRender(value) {
     value.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    bookings.map((booking => {console.log(moment.unix(booking.appointment*1000));console.log(value);console.log(moment.unix(booking.appointment).diff(value, 'hours'))}))
+    bookings.map((booking => {console.log(moment.unix(booking.appointment));console.log(value);console.log(moment.unix(booking.appointment).diff(value, 'hours'))}))
     const dbks = bookings.filter(
       (booking) =>
         moment.unix(booking.appointment).diff(value, 'hours') < 24 &&
@@ -89,7 +89,7 @@ export default function Bookings() {
         onOk={onOk}
       >
         {dayBookings.map((booking) => (
-          <p key={booking.unix()}>
+          <p key={booking.appointment}>
             <Link
               to={{
                 pathname: '/bookingInfo',
