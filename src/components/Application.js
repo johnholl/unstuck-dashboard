@@ -4,11 +4,11 @@ import { Spin } from 'antd';
 import { UserContext } from '../providers/UserProvider';
 import Dashboard from './dashboard/dashboard';
 import DashRedirect from './dashboard/dashRedirect';
-import 'antd/dist/antd.css';
 import bookingInfo from './booking/bookingInfo';
 import CreateService from './service/createService';
 import EditService from './service/editService';
 import LoginScreen from './authentication/LoginScreen';
+import '../App.less';
 
 export default function Application() {
   const user = useContext(UserContext).user;

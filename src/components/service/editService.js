@@ -55,6 +55,8 @@ export default function EditService(props) {
             ? props.location.service.description
             : '',
           autoAppt: props.location.service.autoAppt ? props.location.service.autoAppt : false,
+          mintime: props.location.service.mintime ? props.location.service.mintime : 1,
+          maxtime: props.location.service.maxtime ? props.location.service.maxtime : 30,
         }}
       >
         <Form.Item
@@ -91,6 +93,30 @@ export default function EditService(props) {
             <InputNumber min={0} max={360} step={5} />
           </Form.Item>
           <span className="ant-form-text"> minutes</span>
+        </Form.Item>
+        <Form.Item label={
+        <div>
+        Minimum Booking Notice{' '}
+        <Popover content="Customers must book at least this far in advance. You can use fractions to denote parts of the day e.g. 0.5 is 12 hours">
+          <InfoCircleOutlined size="small" />
+        </Popover>
+      </div>}>
+          <Form.Item name="mintime" noStyle>
+            <InputNumber min={0} max={360} step={1} />
+          </Form.Item>
+          <span className="ant-form-text"> day(s)</span>
+        </Form.Item>
+        <Form.Item label={
+        <div>
+        Maximum Booking Notice{' '}
+        <Popover content="Customers can schedule appointments up to this far in the future.">
+          <InfoCircleOutlined size="small" />
+        </Popover>
+      </div>}>
+          <Form.Item name="maxtime" noStyle>
+            <InputNumber min={0} max={365} step={1} />
+          </Form.Item>
+          <span className="ant-form-text"> day(s)</span>
         </Form.Item>
         <Form.Item name={'description'} label="Description">
           <Input.TextArea />

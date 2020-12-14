@@ -65,6 +65,8 @@ export default function CreateService(props) {
           website: serviceInfo.website,
           duration: 0,
           autoAppt: true,
+          mintime: 1,
+          maxtime: 30
         }}
       >
         <Form.Item
@@ -101,6 +103,30 @@ export default function CreateService(props) {
             <InputNumber min={0} max={360} step={5} />
           </Form.Item>
           <span className="ant-form-text"> minutes</span>
+        </Form.Item>
+        <Form.Item label={
+        <div>
+        Minimum Booking Notice{' '}
+        <Popover content="Customers must book at least this far in advance. You can use fractions to denote parts of the day e.g. 0.5 is 12 hours">
+          <InfoCircleOutlined size="small" />
+        </Popover>
+      </div>}>
+          <Form.Item name="mintime" noStyle>
+            <InputNumber min={0} max={360} step={1} />
+          </Form.Item>
+          <span className="ant-form-text"> day(s)</span>
+        </Form.Item>
+        <Form.Item label={
+        <div>
+        Maximum Booking Notice{' '}
+        <Popover content="Customers can schedule appointments up to this far in the future.">
+          <InfoCircleOutlined size="small" />
+        </Popover>
+      </div>}>
+          <Form.Item name="maxtime" noStyle>
+            <InputNumber min={0} max={365} step={1} />
+          </Form.Item>
+          <span className="ant-form-text"> day(s)</span>
         </Form.Item>
         <Form.Item name={'description'} label="Description">
           <Input.TextArea />

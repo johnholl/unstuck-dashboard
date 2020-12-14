@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Route } from 'react-router-dom';
-import { Layout, Menu, Button, Row, Modal } from 'antd';
+import { Layout, Menu, Button, Modal, Typography } from 'antd';
 import {
   UserOutlined,
   ClockCircleOutlined,
   CalendarOutlined,
   FireOutlined,
 } from '@ant-design/icons';
+import { purple } from '@ant-design/colors';
 import '../../styles/dashboard.css';
 import { auth } from '../../firebase';
 import Profile from './profile';
@@ -14,6 +15,7 @@ import Bookings from './bookings';
 import Services from './services';
 import Availability from './availability';
 
+const {Text} = Typography;
 const { Header, Content, Footer, Sider } = Layout;
 
 export default function Dashboard(props) {
@@ -38,7 +40,7 @@ export default function Dashboard(props) {
   return (
     <Layout
       style={{
-        background: 'blue',
+        backgroundColor: purple[3],
         minHeight: 'calc(100vh - 10px)',
         overflow: 'scroll',
       }}
@@ -57,10 +59,8 @@ export default function Dashboard(props) {
       >
         <p>Are you sure you want to delete this service?</p>
       </Modal>
-      <Header style={{ justify: 'end' }}>
-        <Row align="middle" justify="end" style={{ padding: 20 }}>
+      <Header style={{display:"flex", alignItems:"center", justifyContent:"end", backgroundColor:purple[6]}}>
           <Button onClick={openSignOutModal}>Sign out</Button>
-        </Row>
       </Header>
       <Layout>
         <Sider
@@ -72,6 +72,7 @@ export default function Dashboard(props) {
           onCollapse={(collapsed, type) => {
             console.log(collapsed, type);
           }}
+          style={{backgroundColor:"white"}}
         >
           <Menu
             theme="light"
@@ -80,16 +81,16 @@ export default function Dashboard(props) {
             onClick={onMenuChange}
           >
             <Menu.Item key="bookings" icon={<CalendarOutlined />}>
-              bookings
+              <Text strong>bookings</Text>
             </Menu.Item>
             <Menu.Item key="services" icon={<FireOutlined />}>
-              services
+              <Text strong>services</Text>
             </Menu.Item>
             <Menu.Item key="availability" icon={<ClockCircleOutlined />}>
-              availability
+              <Text strong>availability</Text>
             </Menu.Item>
             <Menu.Item key="profile" icon={<UserOutlined />}>
-              profile
+              <Text strong>profile</Text>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -104,7 +105,7 @@ export default function Dashboard(props) {
           <Route path="/dashboard/availability" component={Availability} />
         </Content>
       </Layout>
-      <Footer style={{ textAlign: 'center' }}>
+      <Footer style={{ textAlign: 'center', backgroundColor:"white" }}>
         Unstuck ©2020 Created by Unstuck
       </Footer>
     </Layout>

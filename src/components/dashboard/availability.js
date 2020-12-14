@@ -1,8 +1,12 @@
 import React, { useContext } from 'react';
-import { Button, Form, TimePicker } from 'antd';
+import { Button, Form, TimePicker, Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
+import sleep from '../../utils/timing';
+
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 const { RangePicker } = TimePicker;
 
@@ -11,7 +15,7 @@ const layout = {
     span: 8,
   },
   wrapperCol: {
-    span: 16,
+    span: 12,
   },
 };
 
@@ -27,6 +31,7 @@ const days = [
 
 export default function Availability() {
   const [availability, setAvailability] = React.useState(null);
+  const [updating, setUpdating] = React.useState(false);
   const { user } = useContext(UserContext);
   React.useEffect(() => {
     (async function () {
@@ -47,7 +52,9 @@ export default function Availability() {
     })();
   }, []);
 
-  const onFinish = (days) => {
+  async function onFinish(days) {
+    setUpdating(true);
+    await sleep(1000);
     Object.entries(days).forEach(([key, value]) => {
       if (value.range !== null) {
         firestore
@@ -55,14 +62,16 @@ export default function Availability() {
           .doc(user.uid)
           .collection('availability')
           .doc(key)
-          .set({ day: key, end: value.range[1]._d, start: value.range[0]._d });
+          .set({ day: key, end: value.range[1]._d, start: value.range[0]._d })
+          .then(setUpdating(false)).catch((error) => console.log(error));;
       } else {
         firestore
           .collection('users')
           .doc(user.uid)
           .collection('availability')
           .doc(key)
-          .delete();
+          .delete()
+          .then(setUpdating(false)).catch((error) => console.log(error));;
       }
     });
   };
@@ -90,8 +99,8 @@ export default function Availability() {
           </Form.Item>
         ))}
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Button type="primary" htmlType="submit" disabled={updating}>
+          {updating ? <Spin indicator={antIcon} style={{ paddingLeft: 10 }} /> : "Submit"}
           </Button>
         </Form.Item>
       </Form>

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Spin, Popover } from 'antd';
+import { Form, Input, Button, Spin, Popover, Row, Col } from 'antd';
 import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
@@ -141,14 +141,23 @@ export default function Profile() {
         >
           <Input />
         </Form.Item>
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+        <Form.Item wrapperCol={{}}>
           <Button type="primary" htmlType="submit" disabled={updating}>
-            Save
+          {updating ? <Spin indicator={antIcon} style={{ paddingLeft: 10 }} /> : "Save"}
           </Button>
-          {updating && <Spin indicator={antIcon} style={{ paddingLeft: 10 }} />}
         </Form.Item>
       </Form>
-      <GoogleAuth />
+      <Row style={{alignItems:"center", justifyContent:"left", textAlign:"right"}}>
+        <Col span={6} style={{textAlign:"right"}}>
+          <p>Connect to Google Calendar{" "}
+          <Popover content="In order for Unstuck to automatically create calendar events you'll need to authenticate through Google.">
+                <InfoCircleOutlined size="small" />
+          </Popover>{" :"} </p>
+        </Col>
+        <Col style={{padding:5}}>
+          <GoogleAuth />
+        </Col>
+      </Row>
     </div>
   );
 }
