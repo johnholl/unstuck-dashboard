@@ -1,10 +1,13 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Spin, Popover, Row, Col } from 'antd';
+import { Form, Input, Button, Spin, Popover, Row, Col, Typography } from 'antd';
 import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import GoogleAuth from '../../utils/googleAuth';
 import sleep from '../../utils/timing';
+
+
+const {Paragraph} = Typography;
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -31,6 +34,7 @@ const validateMessages = {
 export default function Profile() {
   const [profileInfo, setProfileInfo] = React.useState(null);
   const [updating, setUpdating] = React.useState(false);
+  const [buttonText, setButtonText] = React.useState("book an appointment");
   const { user } = useContext(UserContext);
   React.useEffect(() => {
     (async function () {
@@ -154,10 +158,35 @@ export default function Profile() {
                 <InfoCircleOutlined size="small" />
           </Popover>{" :"} </p>
         </Col>
-        <Col style={{padding:5}}>
+        <Col>
           <GoogleAuth />
         </Col>
       </Row>
+      <Row style={{alignItems:"center"}}>
+        <Col span={12}>
+          <Row style={{alignItems:"center", justifyContent:"left", textAlign:"right"}}>
+            <Col span={12}>
+          <p>Set button text:{" "}</p>
+          </Col>
+          <Col span={10}>
+          <Input defaultValue={buttonText} onChange={(val)=>{console.log(val);setButtonText(val.target.value)}}/>
+          </Col>
+          </Row>
+        </Col>
+        <Col span={12}>
+          <Paragraph>
+            <pre>
+              {`<p><a target="_top" style=" background-color: #722ed1; color: white; height: 40px; text-transform: uppercase; font-family: 'Square Market', 'helvetica neue', helvetica, arial, sans-serif; letter-spacing: 1px; line-height: 38px; padding: 0 28px; border-radius: 3px; font-weight: 500; font-size: 14px; cursor: pointer; display: inline-block; " href="https://unstuck.booking.johnholler.com/serviceSelect/${user.uid}" rel="nofollow noopener noreferrer">${buttonText}</a></p>`}
+            </pre>
+          </Paragraph>
+          <p>
+            <a target="_top" style={{backgroundColor: "#722ed1", color: "white", height: "40px", textTransform: "uppercase", fontFamily: "Square Market, helvetica neue, helvetica, arial, sans-serif", letterSpacing: '1px', lineHeight: "38px", padding: "3px", borderRadius: "3px", fontWeight: "500", fontSize: "14px", cursor: "pointer", display: "inline-block"}} href={"https://unstuck.booking.johnholler.com/serviceSelect/"+user.uid} rel="nofollow noopener noreferrer">{buttonText}</a>
+          </p>
+        </Col>
+      </Row>
+
+
+
     </div>
   );
 }
