@@ -42,7 +42,6 @@ export default function Dashboard(props) {
       style={{
         backgroundColor: purple[3],
         minHeight: 'calc(100vh - 10px)',
-        overflow: 'scroll',
       }}
     >
       <Modal
@@ -57,7 +56,7 @@ export default function Dashboard(props) {
           </Button>,
         ]}
       >
-        <p>Are you sure you want to delete this service?</p>
+        <p>Are you sure you want to sign out?</p>
       </Modal>
       <Header style={{display:"flex", alignItems:"center", justifyContent:"end", backgroundColor:purple[6]}}>
           <Button onClick={openSignOutModal}>Sign out</Button>
