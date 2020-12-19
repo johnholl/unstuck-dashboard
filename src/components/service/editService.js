@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
-import { Form, Input, InputNumber, Button, Switch, Popover } from 'antd';
+import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
+
+const {Title} = Typography;
 
 const layout = {
   labelCol: {
@@ -38,9 +40,17 @@ export default function EditService(props) {
 
   return (
     <div style={{ padding: 24, minHeight: 360, justifyContent: 'center' }}>
+      <Row justify="left">
+        <Col span={12} offset={8}>
+          <Row align="left">
+            <Title>Edit Service</Title>
+          </Row>
+        </Col>
+      </Row>
       <Form
         {...layout}
         name="nest-messages"
+        size="large"
         onFinish={onFinish}
         validateMessages={validateMessages}
         initialValues={{
@@ -70,6 +80,9 @@ export default function EditService(props) {
         >
           <Input />
         </Form.Item>
+        <Form.Item name={'description'} label="Description">
+          <Input.TextArea />
+        </Form.Item>
         <Form.Item
           name={'price'}
           label="Price"
@@ -79,47 +92,40 @@ export default function EditService(props) {
             },
           ]}
         >
-          <InputNumber
-            min={0}
-            step={5}
-            formatter={(value) =>
-              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-          />
-        </Form.Item>
-        <Form.Item label="Duration">
+          <Row justify="middle">
           <Form.Item name="duration" noStyle>
             <InputNumber min={0} max={360} step={5} />
           </Form.Item>
           <span className="ant-form-text"> minutes</span>
+          </Row>
         </Form.Item>
         <Form.Item label={
         <div>
-        Minimum Booking Notice{' '}
+        Min Booking Notice{' '}
         <Popover content="Customers must book at least this far in advance. You can use fractions to denote parts of the day e.g. 0.5 is 12 hours">
           <InfoCircleOutlined size="small" />
         </Popover>
       </div>}>
+        <Row justify="middle">
           <Form.Item name="mintime" noStyle>
             <InputNumber min={0} max={360} step={1} />
           </Form.Item>
           <span className="ant-form-text"> day(s)</span>
+          </Row>
         </Form.Item>
         <Form.Item label={
         <div>
-        Maximum Booking Notice{' '}
+        Max Booking Notice{' '}
         <Popover content="Customers can schedule appointments up to this far in the future.">
           <InfoCircleOutlined size="small" />
         </Popover>
       </div>}>
+        <Row justify="middle">
           <Form.Item name="maxtime" noStyle>
             <InputNumber min={0} max={365} step={1} />
           </Form.Item>
           <span className="ant-form-text"> day(s)</span>
-        </Form.Item>
-        <Form.Item name={'description'} label="Description">
-          <Input.TextArea />
+          </Row>
         </Form.Item>
         <Form.Item name={'autoAppt'} valuePropName={props.location.service.autoAppt ? "checked" : ""} label={
         <div>
@@ -128,12 +134,16 @@ export default function EditService(props) {
           <InfoCircleOutlined size="small" />
         </Popover>
       </div>}>
-          <Switch />
+          <Row>
+            <Switch />
+          </Row>
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Row>
+          <Button type="primary" htmlType="submit" style={{width:"80%"}}>
+            Update
           </Button>
+          </Row>
         </Form.Item>
       </Form>
     </div>

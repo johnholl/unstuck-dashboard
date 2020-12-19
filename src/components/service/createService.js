@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
-import { Form, Input, InputNumber, Button, Switch, Popover } from 'antd';
+import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
+
+const {Title} = Typography;
 
 const layout = {
   labelCol: {
@@ -51,11 +53,19 @@ export default function CreateService(props) {
   }
 
   return (
-    <div style={{ padding: 24, minHeight: 360, justifyContent: 'center' }}>
+    <div style={{ padding: 24, minHeight: 360 }}>
+      <Row justify="left">
+        <Col span={12} offset={8}>
+          <Row align="left">
+            <Title>Create a Service</Title>
+          </Row>
+        </Col>
+      </Row>
       <Form
         {...layout}
         name="nest-messages"
         onFinish={onFinish}
+        size={"large"}
         validateMessages={validateMessages}
         initialValues={{
           name: serviceInfo.name,
@@ -71,7 +81,7 @@ export default function CreateService(props) {
       >
         <Form.Item
           name={'name'}
-          label="Name of Service"
+          label="Service Name"
           rules={[
             {
               required: true,
@@ -79,6 +89,9 @@ export default function CreateService(props) {
           ]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item name={'description'} label="Description">
+          <Input.TextArea />
         </Form.Item>
         <Form.Item
           name={'price'}
@@ -89,6 +102,7 @@ export default function CreateService(props) {
             },
           ]}
         >
+          <Row>
           <InputNumber
             min={0}
             step={5}
@@ -97,55 +111,63 @@ export default function CreateService(props) {
             }
             parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
           />
+          </Row>
         </Form.Item>
         <Form.Item label="Duration">
+        <Row align="middle">
           <Form.Item name="duration" noStyle>
             <InputNumber min={0} max={360} step={5} />
           </Form.Item>
           <span className="ant-form-text"> minutes</span>
+          </Row>
         </Form.Item>
         <Form.Item label={
         <div>
-        Minimum Booking Notice{' '}
+        Min Booking Notice{' '}
         <Popover content="Customers must book at least this far in advance. You can use fractions to denote parts of the day e.g. 0.5 is 12 hours">
           <InfoCircleOutlined size="small" />
         </Popover>
       </div>}>
+      <Row align="middle">
           <Form.Item name="mintime" noStyle>
             <InputNumber min={0} max={360} step={1} />
           </Form.Item>
           <span className="ant-form-text"> day(s)</span>
+          </Row>
         </Form.Item>
         <Form.Item label={
         <div>
-        Maximum Booking Notice{' '}
+        Max Booking Notice{' '}
         <Popover content="Customers can schedule appointments up to this far in the future.">
           <InfoCircleOutlined size="small" />
         </Popover>
       </div>}>
+      <Row align="middle">
           <Form.Item name="maxtime" noStyle>
             <InputNumber min={0} max={365} step={1} />
           </Form.Item>
           <span className="ant-form-text"> day(s)</span>
-        </Form.Item>
-        <Form.Item name={'description'} label="Description">
-          <Input.TextArea />
+          </Row>
         </Form.Item>
         <Form.Item name={'autoAppt'} label={
         <div>
-        Automatically accept appointments{' '}
+        Autoaccept appointments{' '}
         <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
           <InfoCircleOutlined size="small" />
         </Popover>
       </div>}>
+      <Row>
           <Switch />
+          </Row>
         </Form.Item>
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
+        <Form.Item labelCol={{}} wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Row>
+          <Button type="primary" htmlType="submit" style={{width:'80%'}}>
+            Finish
           </Button>
+          </Row>
         </Form.Item>
       </Form>
-    </div>
+      </div>
   );
 }
