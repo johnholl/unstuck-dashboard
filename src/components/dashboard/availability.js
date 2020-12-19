@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, Form, TimePicker, Spin } from 'antd';
+import { Button, Form, TimePicker, Spin, Row } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { firestore } from '../../firebase';
@@ -85,6 +85,7 @@ export default function Availability() {
       <Form {...layout} name="nest-messages" onFinish={onFinish}>
         {days.map((day) => (
           <Form.Item key={day} label={day} style={{ marginBottom: 0 }}>
+            <Row>
             <Form.Item
               name={[day, 'range']}
               style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
@@ -96,12 +97,15 @@ export default function Availability() {
             >
               <RangePicker use12Hours format="h:mm a" minuteStep={15} />
             </Form.Item>
+            </Row>
           </Form.Item>
         ))}
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit" disabled={updating}>
-          {updating ? <Spin indicator={antIcon} style={{ paddingLeft: 10 }} /> : "Submit"}
+          <Row>
+          <Button type="primary" htmlType="submit" disabled={updating} style={{width:"calc(50% - 8px)"}}>
+          {updating ? <Spin indicator={antIcon} style={{ paddingLeft: 10 }} /> : "Save"}
           </Button>
+          </Row>
         </Form.Item>
       </Form>
     </div>
