@@ -1,13 +1,18 @@
 import React, { useContext, useState } from 'react';
-import { Calendar, Modal, Badge } from 'antd';
+import { Calendar, Modal, Button, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { UserContext } from '../../providers/UserProvider';
 import { firestore } from '../../firebase';
 
+const {Text} = Typography;
+
+const txtColors = {"accepted": "green", "declined": "red", "requested": "orange"}
+
 export default function Bookings() {
   const { user } = useContext(UserContext);
   const [modalVis, setModalVis] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(moment());
   const [bookings, setBookings] = useState(null);
   const [dayBookings, setDayBookings] = useState([]);
 
@@ -41,8 +46,12 @@ export default function Bookings() {
         moment.unix(booking.appointment).diff(value, 'hours') < 24 &&
         moment.unix(booking.appointment).diff(value, 'hours') > 0,
     );
+    console.log("DBKS");
+    console.log(dbks);
     setDayBookings(dbks);
+    setSelectedDate(value);
     setModalVis(true);
+
   }
 
   function onCancel() {
@@ -55,22 +64,21 @@ export default function Bookings() {
 
   function dateCellRender(value) {
     value.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    bookings.map((booking => {console.log(moment.unix(booking.appointment));console.log(value);console.log(moment.unix(booking.appointment).diff(value, 'hours'))}))
     const dbks = bookings.filter(
       (booking) =>
         moment.unix(booking.appointment).diff(value, 'hours') < 24 &&
         moment.unix(booking.appointment).diff(value, 'hours') > 0,
     );
+
+    const spillover = dbks.length > 2;
     return (
       <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        {dbks.map((booking) => (
+        {dbks.slice(0, 2).map((booking) => (
           <li key={booking.id}>
-            <Badge
-              status={booking.badgeStatus}
-              text={moment.unix(booking.appointment).format('hh:mm A')}
-            />
+            <Text style={{color: txtColors[booking.status]}}>{moment.unix(booking.appointment).format('h:mma')}</Text>
           </li>
         ))}
+        {spillover && <Text>{". . ."}</Text>}
       </ul>
     );
   }
@@ -83,13 +91,14 @@ export default function Bookings() {
     <div style={{ padding: 24, minHeight: 360 }}>
       <Calendar onSelect={onChange} dateCellRender={dateCellRender} />
       <Modal
-        title="bookings"
+        title={selectedDate.format("MM/DD/YYYY")}
         visible={modalVis}
         onCancel={onCancel}
         onOk={onOk}
+        key={selectedDate}
       >
         {dayBookings.map((booking) => (
-          <p key={booking.appointment}>
+          <p key={booking.id}>
             <Link
               to={{
                 pathname: '/bookingInfo',
@@ -97,10 +106,11 @@ export default function Bookings() {
                   bookingNumber: booking.id,
                 },
               }}
+              key={booking.id}
             >
-              {booking.customer +
-                ' at ' +
-                moment.unix(booking.appointment).format('h:mm a')}
+              <Button key={booking.id}>
+              {moment.unix(booking.appointment).format('h:mma') + " with " + (booking.customerName ? booking.customerName : booking.customer)}
+              </Button>
             </Link>
           </p>
         ))}
