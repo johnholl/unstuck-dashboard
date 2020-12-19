@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import { Layout, Menu, Button, Modal, Typography } from 'antd';
 import {
@@ -21,9 +21,11 @@ const { Header, Content, Footer, Sider } = Layout;
 export default function Dashboard(props) {
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    props.history.push('/dashboard/bookings');
-  }, []);
+  console.log(props);
+
+  // useEffect(() => {
+  //   props.history.push('/dashboard/bookings');
+  // }, []);
 
   const onMenuChange = (value) => {
     props.history.push('/dashboard/' + value.key);
@@ -76,7 +78,7 @@ export default function Dashboard(props) {
           <Menu
             theme="light"
             mode="inline"
-            defaultSelectedKeys={['bookings']}
+            defaultSelectedKeys={[props.location.pathname.split("/").pop()]}
             onClick={onMenuChange}
           >
             <Menu.Item key="bookings" icon={<CalendarOutlined />}>
