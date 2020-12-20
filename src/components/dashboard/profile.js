@@ -3,7 +3,6 @@ import { Form, Input, Button, Spin, Popover, Row, Col, Typography } from 'antd';
 import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
-import GoogleAuth from '../../utils/googleAuth';
 import sleep from '../../utils/timing';
 
 
@@ -151,17 +150,6 @@ export default function Profile() {
           </Button>
         </Form.Item>
       </Form>
-      <Row style={{alignItems:"center", justifyContent:"left", textAlign:"right"}}>
-        <Col span={6} style={{textAlign:"right"}}>
-          <p>Connect to Google Calendar{" "}
-          <Popover content="In order for Unstuck to automatically create calendar events you'll need to authenticate through Google.">
-                <InfoCircleOutlined size="small" />
-          </Popover>{" :"} </p>
-        </Col>
-        <Col>
-          <GoogleAuth />
-        </Col>
-      </Row>
       <Row style={{alignItems:"center"}}>
         <Col span={12}>
           <Row style={{alignItems:"center", justifyContent:"left", textAlign:"right"}}>

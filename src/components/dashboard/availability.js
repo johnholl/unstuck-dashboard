@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
-import { Button, Form, TimePicker, Spin, Row } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Form, TimePicker, Spin, Row, Col, Popover, Divider } from 'antd';
+import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import sleep from '../../utils/timing';
+import GoogleAuth from '../../utils/googleAuth';
+
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -82,6 +84,18 @@ export default function Availability() {
 
   return (
     <div style={{ padding: 24, minHeight: 360 }}>
+      <Row style={{justifyContent:"left"}} align="middle">
+        <Col span={8} style={{textAlign:"right"}}>
+          <p>Connect to Google Calendar{" "}
+          <Popover content="Log in to Google so we can automatically create calendar events and check for conflicts.">
+                <InfoCircleOutlined size="small" />
+          </Popover>{" : "} </p>
+        </Col>
+        <Col style={{paddingLeft:10}}>
+          <GoogleAuth />
+        </Col>
+      </Row>
+      <Divider/>
       <Form {...layout} name="nest-messages" onFinish={onFinish}>
         {days.map((day) => (
           <Form.Item key={day} label={day} style={{ marginBottom: 0 }}>
