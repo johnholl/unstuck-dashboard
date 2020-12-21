@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState} from 'react';
 import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
@@ -28,7 +28,8 @@ const validateMessages = {
 
 export default function CreateService(props) {
   const { user } = useContext(UserContext);
-  const [serviceInfo, setServiceInfo] = React.useState(null);
+  const [serviceInfo, setServiceInfo] = useState(null);
+  const [autoAppt, setAutoAppt] = useState(false)
   React.useEffect(() => {
     setServiceInfo({
       name: '',
@@ -44,7 +45,7 @@ export default function CreateService(props) {
       .collection('users')
       .doc(user.uid)
       .collection('services')
-      .add(values)
+      .add({values, autoAppt})
       .then(() => props.history.push('/dashboard/services'));
   };
 
@@ -149,17 +150,21 @@ export default function CreateService(props) {
           <span className="ant-form-text"> day(s)</span>
           </Row>
         </Form.Item>
-        <Form.Item name={'autoAppt'} label={
-        <div>
-        Autoaccept appointments{' '}
-        <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
-          <InfoCircleOutlined size="small" />
-        </Popover>
-      </div>}>
-      <Row>
-          <Switch />
-          </Row>
-        </Form.Item>
+        <Row align="middle">
+          <Col span={8}>
+            <Row justify="end" align="middle">
+          {"Automatically accept appointments "}
+          <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
+          <div style={{padding:5}}><InfoCircleOutlined size="small" /></div>
+        </Popover>{" : "}
+        </Row>
+          </Col>
+          <Col span={8}>
+            <Row justify="start" style={{paddingLeft:10}}>
+            <Switch checked={autoAppt} onChange={() => setAutoAppt(!autoAppt)}/>
+            </Row>
+          </Col>
+        </Row>
         <Form.Item labelCol={{}} wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Row>
           <Button type="primary" htmlType="submit" style={{width:'80%'}}>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
@@ -28,13 +28,15 @@ const validateMessages = {
 
 export default function EditService(props) {
   const { user } = useContext(UserContext);
+  const [autoAppt, setAutoAppt] = useState(props.location.service.autoAppt);
+
   const onFinish = (values) => {
     firestore
       .collection('users')
       .doc(user.uid)
       .collection('services')
       .doc(props.location.service.id)
-      .set(values)
+      .set({...values, autoAppt})
       .then(() => props.history.push('dashboard/services'));
   };
 
@@ -64,7 +66,6 @@ export default function EditService(props) {
           description: props.location.service.description
             ? props.location.service.description
             : '',
-          autoAppt: props.location.service.autoAppt ? props.location.service.autoAppt : false,
           mintime: props.location.service.mintime ? props.location.service.mintime : 1,
           maxtime: props.location.service.maxtime ? props.location.service.maxtime : 30,
         }}
@@ -141,19 +142,23 @@ export default function EditService(props) {
           <span className="ant-form-text"> day(s)</span>
           </Row>
         </Form.Item>
-        <Form.Item name={'autoAppt'} valuePropName={props.location.service.autoAppt ? "checked" : ""} label={
-        <div>
-        Automatically accept appointments{' '}
-        <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
-          <InfoCircleOutlined size="small" />
-        </Popover>
-      </div>}>
-          <Row>
-            <Switch />
-          </Row>
-        </Form.Item>
+        <Row align="middle">
+          <Col span={8}>
+            <Row justify="end" align="middle">
+          {"Automatically accept appointments "}
+          <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
+          <div style={{padding:5}}><InfoCircleOutlined size="small" /></div>
+        </Popover>{" : "}
+        </Row>
+          </Col>
+          <Col span={8}>
+            <Row justify="start" style={{paddingLeft:10}}>
+            <Switch checked={autoAppt} onChange={() => setAutoAppt(!autoAppt)}/>
+            </Row>
+          </Col>
+        </Row>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Row>
+          <Row style={{paddingTop:40}}>
           <Button type="primary" htmlType="submit" style={{width:"80%"}}>
             Update
           </Button>
