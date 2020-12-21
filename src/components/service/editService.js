@@ -83,6 +83,7 @@ export default function EditService(props) {
         <Form.Item name={'description'} label="Description">
           <Input.TextArea />
         </Form.Item>
+
         <Form.Item
           name={'price'}
           label="Price"
@@ -92,13 +93,26 @@ export default function EditService(props) {
             },
           ]}
         >
-          <Row justify="middle">
+          <Row>
+          <InputNumber
+            min={0}
+            step={5}
+            formatter={(value) =>
+              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+          />
+          </Row>
+        </Form.Item>
+        <Form.Item label="Duration">
+        <Row align="middle">
           <Form.Item name="duration" noStyle>
             <InputNumber min={0} max={360} step={5} />
           </Form.Item>
           <span className="ant-form-text"> minutes</span>
           </Row>
         </Form.Item>
+
         <Form.Item label={
         <div>
         Min Booking Notice{' '}
