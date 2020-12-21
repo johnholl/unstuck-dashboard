@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Spin, Popover, Row, Col, Typography } from 'antd';
+import { Form, Input, Button, Spin, Popover, Row, Col, Typography, Divider } from 'antd';
 import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import sleep from '../../utils/timing';
 
 
-const {Paragraph} = Typography;
+const {Paragraph, Title} = Typography;
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -66,6 +66,9 @@ export default function Profile() {
 
   return (
     <div style={{ padding: 24, minHeight: 360 }}>
+      <Row justify="right" style={{paddingBottom:20}}>
+        <Title level={3}>Profile Information</Title> 
+      </Row>
       <Form
         {...layout}
         name="nest-messages"
@@ -145,20 +148,31 @@ export default function Profile() {
           <Input />
         </Form.Item>
         <Form.Item wrapperCol={{}}>
-          <Button type="primary" htmlType="submit" disabled={updating}>
+          <Button type="primary" htmlType="submit" disabled={updating} style={{width:"20%"}}>
           {updating ? <Spin indicator={antIcon} style={{ paddingLeft: 10 }} /> : "Save"}
           </Button>
         </Form.Item>
       </Form>
-      <Row style={{alignItems:"center"}}>
+      <Divider/>
+      <Row justify="right" style={{paddingBottom:20}}>
+      <Title level={3}>Embed your booking button</Title> 
+      </Row>
+      <Row justify="center" align="top">
         <Col span={12}>
-          <Row style={{alignItems:"center", justifyContent:"left", textAlign:"right"}}>
+        <Row justify="center">
             <Col span={12}>
-          <p>Set button text:{" "}</p>
-          </Col>
-          <Col span={10}>
-          <Input defaultValue={buttonText} onChange={(val)=>{console.log(val);setButtonText(val.target.value)}}/>
-          </Col>
+              <Title level={4}>Set button text{" "}</Title>
+            </Col>
+          </Row>
+          <Row justify="center">
+            <Col span={12}>
+              <Input defaultValue={buttonText} onChange={(val)=>{console.log(val);setButtonText(val.target.value)}}/>
+            </Col>
+          </Row>
+          <Row justify="center">
+            <Col span={12} style={{paddingTop:50}}>
+              <span target="_top" style={{backgroundColor: "#722ed1", color: "white", height: "45px", textTransform: "uppercase", fontFamily: "Square Market, helvetica neue, helvetica, arial, sans-serif", letterSpacing: '1px', lineHeight: "38px", padding: "3px", borderRadius: "3px", fontWeight: "500", fontSize: "14px", cursor: "pointer", display: "inline-block"}} rel="nofollow noopener noreferrer">{buttonText}</span>
+            </Col>
           </Row>
         </Col>
         <Col span={12}>
@@ -167,9 +181,6 @@ export default function Profile() {
               {`<p><a target="_top" style=" background-color: #722ed1; color: white; height: 40px; text-transform: uppercase; font-family: 'Square Market', 'helvetica neue', helvetica, arial, sans-serif; letter-spacing: 1px; line-height: 38px; padding: 0 28px; border-radius: 3px; font-weight: 500; font-size: 14px; cursor: pointer; display: inline-block; " href="https://unstuck.booking.johnholler.com/serviceSelect/${user.uid}" rel="nofollow noopener noreferrer">${buttonText}</a></p>`}
             </pre>
           </Paragraph>
-          <p>
-            <a target="_top" style={{backgroundColor: "#722ed1", color: "white", height: "40px", textTransform: "uppercase", fontFamily: "Square Market, helvetica neue, helvetica, arial, sans-serif", letterSpacing: '1px', lineHeight: "38px", padding: "3px", borderRadius: "3px", fontWeight: "500", fontSize: "14px", cursor: "pointer", display: "inline-block"}} href={"https://unstuck.booking.johnholler.com/serviceSelect/"+user.uid} rel="nofollow noopener noreferrer">{buttonText}</a>
-          </p>
         </Col>
       </Row>
 

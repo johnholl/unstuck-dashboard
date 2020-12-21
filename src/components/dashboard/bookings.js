@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Calendar, Modal, Button, Typography } from 'antd';
+import { Calendar, Modal, Button, Typography, Row } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { UserContext } from '../../providers/UserProvider';
 import { firestore } from '../../firebase';
 
-const {Text} = Typography;
+const {Text, Title} = Typography;
 
 const txtColors = {"accepted": "green", "declined": "red", "requested": "orange"}
 
@@ -89,6 +89,9 @@ export default function Bookings() {
 
   return (
     <div style={{ padding: 24, minHeight: 360 }}>
+      <Row justify="right" style={{paddingBottom:20}}>
+        <Title level={3}>Booking Calendar</Title> 
+      </Row>
       <Calendar onSelect={onChange} dateCellRender={dateCellRender} />
       <Modal
         title={selectedDate.format("MM/DD/YYYY")}

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
-import { Layout, Menu, Button, Modal, Typography } from 'antd';
+import { Layout, Menu, Button, Modal, Typography, Row } from 'antd';
 import {
   UserOutlined,
   ClockCircleOutlined,
   CalendarOutlined,
   FireOutlined,
+  ExportOutlined,
 } from '@ant-design/icons';
 import { purple } from '@ant-design/colors';
 import '../../styles/dashboard.css';
 import { auth } from '../../firebase';
+import logo from '../../basicLogo.png';
 import Profile from './profile';
 import Bookings from './bookings';
 import Services from './services';
@@ -22,10 +24,7 @@ export default function Dashboard(props) {
   const [visible, setVisible] = useState(false);
 
   console.log(props);
-
-  // useEffect(() => {
-  //   props.history.push('/dashboard/bookings');
-  // }, []);
+  console.log(props.location.pathname.split("/").pop());
 
   const onMenuChange = (value) => {
     props.history.push('/dashboard/' + value.key);
@@ -60,8 +59,11 @@ export default function Dashboard(props) {
       >
         <p>Are you sure you want to sign out?</p>
       </Modal>
-      <Header style={{display:"flex", alignItems:"center", justifyContent:"end", backgroundColor:purple[6]}}>
-          <Button onClick={openSignOutModal}>Sign out</Button>
+      <Header style={{ backgroundColor:purple[6] }}>
+        <Row justify="space-between" style={{paddingTop:15}}>
+          <img src={logo} width={50} />
+          <Button onClick={openSignOutModal} icon={<ExportOutlined/>} style={{backgroundColor:"gray"}}/>
+        </Row>
       </Header>
       <Layout>
         <Sider
@@ -78,7 +80,7 @@ export default function Dashboard(props) {
           <Menu
             theme="light"
             mode="inline"
-            defaultSelectedKeys={[props.location.pathname.split("/").pop()]}
+            selectedKeys={[props.location.pathname.split("/").pop()]}
             onClick={onMenuChange}
           >
             <Menu.Item key="bookings" icon={<CalendarOutlined />}>
