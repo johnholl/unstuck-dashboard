@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
-import { Layout, Menu, Button, Modal, Typography, Row } from 'antd';
+import { Layout, Menu, Button, Modal, Typography, Row, Tooltip } from 'antd';
 import {
   UserOutlined,
   ClockCircleOutlined,
@@ -62,7 +62,9 @@ export default function Dashboard(props) {
       <Header style={{ backgroundColor:purple[6] }}>
         <Row justify="space-between" style={{paddingTop:15}}>
           <img src={logo} width={50} />
-          <Button onClick={openSignOutModal} icon={<ExportOutlined/>} style={{backgroundColor:"gray"}}/>
+          <Tooltip placement="left" title="sign out">
+            <Button onClick={openSignOutModal} icon={<ExportOutlined/>} style={{backgroundColor:"gray"}}/>
+          </Tooltip>
         </Row>
       </Header>
       <Layout>

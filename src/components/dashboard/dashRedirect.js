@@ -2,5 +2,5 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 export default function DashRedirect() {
-  return <Redirect to="/dashboard" />;
+  return <Redirect to="/dashboard/bookings" />;
 }
