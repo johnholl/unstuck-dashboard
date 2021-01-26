@@ -50,7 +50,9 @@ export default function Bookings() {
     console.log(dbks);
     setDayBookings(dbks);
     setSelectedDate(value);
-    setModalVis(true);
+    if(dbks.length>0){
+      setModalVis(true);
+    }
 
   }
 
