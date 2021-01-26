@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Button, Typography, Row, Col } from 'antd';
 import {GoogleOutlined} from '@ant-design/icons';
 import { auth, googleAuthProvider } from '../../firebase';
@@ -8,7 +8,6 @@ const {Title} = Typography;
 
 
 export default function SignIn(props) {
-  const [error, setError] = useState(null);
   const { user } = useContext(UserContext);
 
 
@@ -17,7 +16,8 @@ export default function SignIn(props) {
         await auth.signInWithPopup(googleAuthProvider);
         props.history.push('/dashboard');
     } catch(err) {
-        setError(err);
+        console.log(err);
+
     }
 }
 
@@ -34,11 +34,6 @@ export default function SignIn(props) {
                 <Row justify="center">
         <Title level={2}>Sign in</Title>
       </Row>
-        {error !== null && (
-          <div className="py-4 bg-red-600 w-full text-white text-center mb-3">
-            {error}
-          </div>
-        )}
                   <Row justify="center" style={{paddingTop:20, paddingBottom:20}}>
                         <Button size="large" type="secondary" style={{width:"50%"}} onClick={googleSignUp}>
                             <GoogleOutlined/> Sign in with Google
