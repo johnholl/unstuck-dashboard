@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {Typography} from 'antd';
+import {Typography, Row, Col} from 'antd';
 import GoogleLogin from 'react-google-login';
 import { UserContext } from '../providers/UserProvider';
 import { firestore } from '../firebase';
@@ -35,6 +35,8 @@ React.useEffect(() => {
 
   return (
     <>
+      <Row align="middle">
+        <Col>
       <GoogleLogin
         clientId="897270128120-eu772csnvrlg7etvogqnvj0j2ce7apn6.apps.googleusercontent.com"
         buttonText="Login"
@@ -47,7 +49,11 @@ React.useEffect(() => {
         accessType="offline"
         prompt="consent"
       />
-      {authed && <Text style={{color:"green"}}>{" Calendar is connected"}</Text>}
+      </Col>
+      <Col>
+      {authed && <Text style={{color:"green", paddingLeft:5}}>{" Calendar is connected"}</Text>}
+      </Col>
+      </Row>
       </>
   );
 }

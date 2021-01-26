@@ -75,20 +75,22 @@ export default function Bookings() {
       <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
         {dbks.slice(0, 2).map((booking) => (
           <li key={booking.id}>
-            <Text style={{color: txtColors[booking.status]}}>{moment.unix(booking.appointment).format('h:mma')}</Text>
+            <Row justify="center">
+            <Text style={{color: txtColors[booking.status], fontWeight:"bold"}}>{moment.unix(booking.appointment).format('h:mma')}</Text>
+            </Row>
           </li>
         ))}
-        {spillover && <Text>{". . ."}</Text>}
+        {spillover && <Text strong={true}>{"more"}</Text>}
       </ul>
     );
   }
 
   if (!bookings) {
-    return <div />;
+    return <div />
   }
 
   return (
-    <div style={{ padding: 24, minHeight: 360 }}>
+    <div style={{ padding: 50, minHeight: 360 }}>
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Booking Calendar</Title> 
       </Row>

@@ -1,5 +1,5 @@
-import React, { useContext, useState} from 'react';
-import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography} from 'antd';
+import React, {useContext, useState} from 'react';
+import { Typography, Row, Col, Button, Form, Input, InputNumber, Switch, Popover} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
@@ -7,26 +7,26 @@ import { UserContext } from '../../providers/UserProvider';
 const {Title} = Typography;
 
 const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 8,
-  },
-};
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 24,
+    },
+  };
 
-const validateMessages = {
-  required: '${label} is required!',
-  types: {
-    email: '${label} is not valid email!',
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
-};
-
-export default function CreateService(props) {
+  const validateMessages = {
+    required: 'required!',
+    types: {
+      email: '${label} is not valid email!',
+      number: '${label} is not a valid number!',
+    },
+    number: {
+      range: '${label} must be between ${min} and ${max}',
+    },
+  };
+  
+export default function SignUpScreen4(props) {
   const { user } = useContext(UserContext);
   const [serviceInfo, setServiceInfo] = useState(null);
   const [autoAppt, setAutoAppt] = useState(true);
@@ -40,29 +40,38 @@ export default function CreateService(props) {
     });
   }, []);
 
+  const next = () =>{
+    props.history.push('/dashboard/bookings');
+  }
+
   const onFinish = (values) => {
     firestore
-      .collection('users')
-      .doc(user.uid)
-      .collection('services')
-      .add({...values, autoAppt})
-      .then(() => props.history.push('/dashboard/services'));
-  };
+    .collection('users')
+    .doc(user.uid)
+    .collection('services')
+    .add({...values, autoAppt})
+    .then(() => props.history.push('/dashboard/bookings'));
+  }
+
+  if(user===null){
+    return(<div>
+      you need to be signed in to access this resource
+    </div>)
+  }
 
   if (!serviceInfo) {
     return <div>not loaded</div>;
   }
 
-  return (
-    <div style={{ padding: 24, minHeight: 360 }}>
-      <Row justify="left">
-        <Col span={12} offset={8}>
-          <Row align="left">
-            <Title>Create a Service</Title>
-          </Row>
-        </Col>
-      </Row>
-      <Form
+    return(
+      <div>
+        <Row justify="center">
+          <Col span={8}>
+          <Row justify="center">
+            <Title level={3}>Create a service</Title>
+            <Title level={5}>A service is a type of appointment. Give it a name and description, duration, price, etc. You can add more services later.</Title>
+            </Row>
+          <Form
         {...layout}
         name="nest-messages"
         onFinish={onFinish}
@@ -82,17 +91,16 @@ export default function CreateService(props) {
       >
         <Form.Item
           name={'name'}
-          label="Service Name"
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <Input />
+          <Input placeholder="Name"/>
         </Form.Item>
-        <Form.Item name={'description'} label="Description">
-          <Input.TextArea />
+        <Form.Item name={'description'}>
+          <Input.TextArea placeholder="Description" rows={6}/>
         </Form.Item>
         <Form.Item
           label="Price" name="price"
@@ -103,6 +111,7 @@ export default function CreateService(props) {
           ]}
         >
               <InputNumber
+                placeholder="price"
                 min={0}
                 step={5}
                 formatter={(value) =>
@@ -127,7 +136,7 @@ export default function CreateService(props) {
         </Form.Item>
         <Form.Item name="mintime" label={
         <div>
-        Min Booking Notice{' '}
+        Min Notice{' '}
         <Popover content="Customers must book at least this many days in advance. You can use fractions to denote parts of the day e.g. 0.5 is 12 hours">
           <InfoCircleOutlined size="small" />
         </Popover>
@@ -140,7 +149,7 @@ export default function CreateService(props) {
         </Form.Item>
         <Form.Item name="maxtime" label={
         <div>
-        Max Booking Notice{' '}
+        Max Notice{' '}
         <Popover content="Customers can schedule appointments up to this many days in the future.">
           <InfoCircleOutlined size="small" />
         </Popover>
@@ -154,26 +163,33 @@ export default function CreateService(props) {
         <Row align="middle">
           <Col span={8}>
             <Row justify="end" align="middle">
-          {"Automatically accept appointments "}
+          {"Autoaccept "}
           <Popover content="When a customer books, it will be accepted and a calendar event will automatically be created">
           <div style={{padding:5}}><InfoCircleOutlined size="small" /></div>
         </Popover>{" : "}
         </Row>
           </Col>
           <Col span={8}>
-            <Row justify="center">
+            <Row justify="end">
             <Switch checked={autoAppt} onChange={() => setAutoAppt(!autoAppt)}/>
             </Row>
           </Col>
         </Row>
-        <Form.Item labelCol={{}} wrapperCol={{ ...layout.wrapperCol, offset: 8}}>
-          <Row style={{paddingTop:40}}>
+        <Form.Item labelCol={{}} wrapperCol={{ ...layout.wrapperCol}}>
+          <Row style={{paddingTop:40}} justify="center">
           <Button type="primary" htmlType="submit" style={{width:'80%'}}>
-            Finish
+            Next
           </Button>
           </Row>
         </Form.Item>
       </Form>
+      <Row justify="center" style={{paddingBottom:50}}>
+          <Button type="secondary" style={{width:'80%'}} onClick={next}>
+            Skip
+          </Button>
+          </Row>
+          </Col>
+        </Row>
       </div>
-  );
+    )
 }

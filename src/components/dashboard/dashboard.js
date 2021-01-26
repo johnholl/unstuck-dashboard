@@ -1,27 +1,32 @@
-import React, { useState } from 'react';
-import { Route } from 'react-router-dom';
-import { Layout, Menu, Button, Modal, Typography, Row, Tooltip } from 'antd';
+import React, { useState, useContext } from 'react';
+import { Route, Link } from 'react-router-dom';
+import { Layout, Menu, Button, Modal, Typography, Row, Tooltip, Col, Image } from 'antd';
 import {
   UserOutlined,
   ClockCircleOutlined,
   CalendarOutlined,
   FireOutlined,
   ExportOutlined,
+  DollarOutlined,
 } from '@ant-design/icons';
 import { purple } from '@ant-design/colors';
 import '../../styles/dashboard.css';
 import { auth } from '../../firebase';
-import logo from '../../basicLogo.png';
+import logo from '../../assets/unstuckwhitepng.png';
+import { UserContext } from '../../providers/UserProvider';
 import Profile from './profile';
 import Bookings from './bookings';
 import Services from './services';
 import Availability from './availability';
+import Finances from './finances';
 
 const {Text} = Typography;
 const { Header, Content, Footer, Sider } = Layout;
 
 export default function Dashboard(props) {
   const [visible, setVisible] = useState(false);
+  const { user } = useContext(UserContext);
+
 
   console.log(props);
   console.log(props.location.pathname.split("/").pop());
@@ -59,12 +64,17 @@ export default function Dashboard(props) {
       >
         <p>Are you sure you want to sign out?</p>
       </Modal>
-      <Header style={{ backgroundColor:purple[6] }}>
-        <Row justify="space-between" style={{paddingTop:15}}>
-          <img src={logo} width={50} />
-          <Tooltip placement="left" title="sign out">
-            <Button onClick={openSignOutModal} icon={<ExportOutlined/>} style={{backgroundColor:"gray"}}/>
-          </Tooltip>
+      <Header style={{ backgroundColor:purple[6], height:100 }}>
+        <Row justify="space-between" align="middle" style={{paddingTop:0, height:"100%"}}>
+          <Link to="/dashboard/bookings">
+          <img src={logo} width={200} />
+          </Link>
+          <Col>
+            <Text style={{color:"white"}}>{user.email + " " }</Text>
+            <Tooltip placement="bottom" title="sign out">
+              <Button onClick={openSignOutModal} icon={<ExportOutlined/>} ghost={true}/>
+            </Tooltip>
+          </Col>
         </Row>
       </Header>
       <Layout>
@@ -77,7 +87,7 @@ export default function Dashboard(props) {
           onCollapse={(collapsed, type) => {
             console.log(collapsed, type);
           }}
-          style={{backgroundColor:"white"}}
+          style={{backgroundColor:"white", position:"relative", height:"800px"}}
         >
           <Menu
             theme="light"
@@ -97,17 +107,20 @@ export default function Dashboard(props) {
             <Menu.Item key="profile" icon={<UserOutlined />}>
               <Text strong>profile</Text>
             </Menu.Item>
+            <Menu.Item key="finances" icon={<DollarOutlined />}>
+              <Text strong>finances</Text>
+            </Menu.Item>
           </Menu>
+            <Image width="100%" 
+            src="https://firebasestorage.googleapis.com/v0/b/unstuck-backend.appspot.com/o/undraw_Astronaut_re_8c33.svg?alt=media&token=cef7909c-6a16-4e04-9ece-e0265cfba3c8" 
+            style={{position:"absolute", bottom:"0", left:"0"}}/>
         </Sider>
-        <Header
-          className="site-layout-sub-header-background"
-          style={{ padding: 0 }}
-        />
         <Content style={{ margin: '24px 16px 0' }}>
           <Route path="/dashboard/profile" component={Profile} />
           <Route path="/dashboard/bookings" component={Bookings} />
           <Route path="/dashboard/services" component={Services} />
           <Route path="/dashboard/availability" component={Availability} />
+          <Route path="/dashboard/finances" component={Finances} />
         </Content>
       </Layout>
       <Footer style={{ textAlign: 'center', backgroundColor:"white" }}>
@@ -116,3 +129,7 @@ export default function Dashboard(props) {
     </Layout>
   );
 }
+
+
+
+

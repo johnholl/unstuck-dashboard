@@ -28,6 +28,7 @@ const validateMessages = {
 
 export default function EditService(props) {
   const { user } = useContext(UserContext);
+  console.log(props.location.service)
   const [autoAppt, setAutoAppt] = useState(props.location.service.autoAppt);
 
   const onFinish = (values) => {
@@ -72,7 +73,7 @@ export default function EditService(props) {
       >
         <Form.Item
           name={'name'}
-          label="Name of Service"
+          label="Service Name"
           rules={[
             {
               required: true,
@@ -84,63 +85,62 @@ export default function EditService(props) {
         <Form.Item name={'description'} label="Description">
           <Input.TextArea />
         </Form.Item>
-
         <Form.Item
-          name={'price'}
-          label="Price"
+          label="Price" name="price"
           rules={[
             {
               required: true,
             },
           ]}
         >
-          <Row>
-          <InputNumber
-            min={0}
-            step={5}
-            formatter={(value) =>
-              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-          />
-          </Row>
+              <InputNumber
+                min={0}
+                step={5}
+                formatter={(value) =>
+                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+              />
         </Form.Item>
-        <Form.Item label="Duration">
-        <Row align="middle">
-          <Form.Item name="duration" noStyle>
-            <InputNumber min={0} max={360} step={5} />
-          </Form.Item>
-          <span className="ant-form-text"> minutes</span>
-          </Row>
-        </Form.Item>
-
         <Form.Item label={
+        <div>
+        Duration{' '}
+        <Popover content="Length of the service in minutes">
+          <InfoCircleOutlined size="small" />
+        </Popover>
+      </div>} name="duration"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}>
+            <InputNumber min={0} max={360} step={5} />
+        </Form.Item>
+        <Form.Item name="mintime" label={
         <div>
         Min Booking Notice{' '}
-        <Popover content="Customers must book at least this far in advance. You can use fractions to denote parts of the day e.g. 0.5 is 12 hours">
+        <Popover content="Customers must book at least this many days in advance. You can use fractions to denote parts of the day e.g. 0.5 is 12 hours">
           <InfoCircleOutlined size="small" />
         </Popover>
-      </div>}>
-        <Row justify="middle">
-          <Form.Item name="mintime" noStyle>
+      </div>} rules={[
+                  {
+                    required: true,
+                  },
+                ]}>
             <InputNumber min={0} max={360} step={1} />
-          </Form.Item>
-          <span className="ant-form-text"> day(s)</span>
-          </Row>
         </Form.Item>
-        <Form.Item label={
+        <Form.Item name="maxtime" label={
         <div>
         Max Booking Notice{' '}
-        <Popover content="Customers can schedule appointments up to this far in the future.">
+        <Popover content="Customers can schedule appointments up to this many days in the future.">
           <InfoCircleOutlined size="small" />
         </Popover>
-      </div>}>
-        <Row justify="middle">
-          <Form.Item name="maxtime" noStyle>
+      </div>} rules={[
+                  {
+                    required: true,
+                  },
+                ]}>
             <InputNumber min={0} max={365} step={1} />
-          </Form.Item>
-          <span className="ant-form-text"> day(s)</span>
-          </Row>
         </Form.Item>
         <Row align="middle">
           <Col span={8}>
@@ -152,7 +152,7 @@ export default function EditService(props) {
         </Row>
           </Col>
           <Col span={8}>
-            <Row justify="start" style={{paddingLeft:10}}>
+            <Row justify="center">
             <Switch checked={autoAppt} onChange={() => setAutoAppt(!autoAppt)}/>
             </Row>
           </Col>

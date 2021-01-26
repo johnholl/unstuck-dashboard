@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button, Form, TimePicker, Spin, Row, Col, Popover, Divider, Typography} from 'antd';
-import { LoadingOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { LoadingOutlined, InfoCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
@@ -35,7 +35,23 @@ const days = [
 export default function Availability() {
   const [availability, setAvailability] = React.useState(null);
   const [updating, setUpdating] = React.useState(false);
+  const [authed, setAuthed] = React.useState(false);
+
   const { user } = useContext(UserContext);
+
+  React.useEffect(() => {
+    (async function () {
+      console.log(user.uid);
+      const userDoc = await firestore.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        setAuthed(userDoc.data().authed);
+      }
+      else {
+        setAuthed(false);
+      }
+    })();
+  }, []);
+
   React.useEffect(() => {
     (async function () {
       const querySnapshot = await firestore
@@ -84,11 +100,14 @@ export default function Availability() {
   }
 
   return (
-    <div style={{ padding: 24, minHeight: 360 }}>
+    <div style={{ padding: 50, minHeight: 360 }}>
       <Row justify="right" style={{paddingBottom:20}}>
-        <Title level={3}>Connect Calendar</Title> 
+        <Title level={3}>Connect Google Calendar</Title> 
       </Row>
-      <Row style={{justifyContent:"left"}} align="middle">
+      {authed ?
+        <Row align="top" justify="center"><CheckCircleOutlined style={{color:"green", fontSize:30, paddingRight:10}} /><Title level={4}>Calendar Connected</Title></Row>
+        :
+        <Row style={{justifyContent:"left"}} align="middle">
         <Col span={8} style={{textAlign:"right"}}>
           <p>Connect to Google Calendar{" "}
           <Popover content="Log in to Google so we can automatically create calendar events and check for conflicts.">
@@ -99,6 +118,8 @@ export default function Availability() {
           <GoogleAuth />
         </Col>
       </Row>
+    }
+
       <Divider/>
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Weekly Availability</Title> 

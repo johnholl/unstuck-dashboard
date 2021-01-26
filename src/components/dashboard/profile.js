@@ -56,6 +56,7 @@ export default function Profile() {
   }, []);
 
     async function onFinish(values) {
+      console.log("VALUES", values);
         setUpdating(true);
         await sleep(1000);
         firestore.collection("users").doc(user.uid).set(values, {merge: true}).then(setUpdating(false)).catch((error) => console.log(error));
@@ -65,20 +66,21 @@ export default function Profile() {
   }
 
   return (
-    <div style={{ padding: 24, minHeight: 360 }}>
+    <div style={{ padding: 50, minHeight: 360 }}>
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Profile Information</Title> 
       </Row>
       <Form
+        size="large"
         {...layout}
         name="nest-messages"
         initialValues={{
-          name: profileInfo.name,
-          email: profileInfo.email,
-          headline: profileInfo.headline,
-          description: profileInfo.description,
-          website: profileInfo.website,
-          videolink: profileInfo.videolink,
+          name: profileInfo.name ? profileInfo.name : "",
+          email: profileInfo.email ? profileInfo.email : "",
+          headline: profileInfo.headline ? profileInfo.headline : "",
+          description: profileInfo.description ? profileInfo.description : "",
+          website: profileInfo.website ? profileInfo.website : "",
+          videolink: profileInfo.videolink ? profileInfo.videolink : "",
         }}
         onFinish={onFinish}
         validateMessages={validateMessages}
