@@ -72,12 +72,12 @@ const {Title, Paragraph, Text} = Typography;
   };
 
   if (!booking || !service || invoiceDisabled===null) {
-    return(<div> {"here"} </div>)
+    return(<div></div>)
   }
 
   return (
     <div style={{ padding: 50 }}>
-      <InvoiceModal booking={booking} bookingId={bookingId} service={service} visible={invoiceVisible} closeModal={()=>setInvoiceVisible(false)}
+      <InvoiceModal booking={booking} bookingId={bookingId} service={service} visible={invoiceVisible} onSuccess={() => setInvoiceSent(true)} closeModal={()=>setInvoiceVisible(false)}
         footer={[
           <Button key="cancel" onClick={() => setInvoiceVisible(false)}>
             Cancel

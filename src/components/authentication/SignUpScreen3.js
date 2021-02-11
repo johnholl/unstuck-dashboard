@@ -34,26 +34,21 @@ export default function SignUpScreen3(props) {
     props.history.push('/signup/4');
   }
 
-  const onFinish = (days) => {
-    Object.entries(days).forEach(([key, value]) => {
-      if (value.range !== null) {
-        firestore
+  async function onFinish(days) {
+    console.log(days);
+    await Promise.all(Object.entries(days).map(async ([key, value]) => {
+      if (value.range) {
+        console.log("VALUE", value);
+        await firestore
           .collection('users')
           .doc(user.uid)
           .collection('availability')
           .doc(key)
           .set({ day: key, end: value.range[1]._d, start: value.range[0]._d })
-          .then(props.history.push('/signup/4'));
-      } else {
-        firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('availability')
-          .doc(key)
-          .delete()
-          .then(props.history.push('/signup/4'));
       }
-    });
+    }));
+    props.history.push('/signup/4')
+
   };
 
   if(user===null){

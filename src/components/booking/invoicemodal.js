@@ -1,7 +1,8 @@
 import React from 'react';
-import {Modal, Form, Input, InputNumber, Row, Button, Popover, notification} from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { firestore, functions } from '../../firebase';
+import {Modal, Form, Input, InputNumber, Row, Button, Popover, notification, Spin, Typography} from 'antd';
+import { InfoCircleOutlined, LoadingOutlined} from '@ant-design/icons';
+import { functions } from '../../firebase';
+import makeid from '../../utils/makeId';
 
 
 const layout = {
@@ -12,6 +13,9 @@ const layout = {
       span: 16,
     },
   };
+
+  const {Text} = Typography;
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   const validateMessages = {
     required: '${label} is required!',
@@ -24,31 +28,34 @@ const layout = {
     },
   };
 
-  const captureFinalPayment = functions.httpsCallable('captureFinalPayment');
+
+  const generateInvoice = functions.httpsCallable('generateInvoice');
 
 
 export default function InvoiceModal(props) {
     const booking = props.booking;
     const service = props.service;
+    const [loading, setLoading] = React.useState(false);
 
     async function onFinish(values) {
       try {
-      await captureFinalPayment({paymentIntent: booking.paymentIntent, price: service.price}, {})
-      console.log("past capture");
-      await firestore.collection('tempinvoices').doc(props.bookingId).set({user: booking.userid, service: booking.serviceid, customer: booking.customer, ...values})
+      setLoading(true)
+      await generateInvoice({key: makeid(24), user: booking.userid, service: booking.serviceid, customer: booking.customer, booking, bookingId: props.bookingId, ...values, paymentIntent: booking.paymentIntent, price: service.price}, {})
       notification.open({
         message: 'Invoice sent',
         description:
           'Your invoice has been sent. You will receive an email when payment has been processed.',
           duration: 5,
       });
+      props.onSuccess();
     }
     catch(error) {
       notification.open({
-        message: 'Erorr processing invoice',
+        message: 'Error processing invoice',
         description:
           'Try again in a few minutes',
       });}
+      setLoading(false);
       props.closeModal();
       
   };
@@ -95,7 +102,7 @@ export default function InvoiceModal(props) {
         <Form.Item labelCol={{}} wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
           <Row>
           <Button type="primary" htmlType="submit" style={{width:'80%'}}>
-            Send
+            {!loading ? "Send" : <Text>Processing<Spin indicator={antIcon} style={{ paddingLeft: 10 }} /></Text> } 
           </Button>
           </Row>
         </Form.Item>

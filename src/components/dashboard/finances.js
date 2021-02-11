@@ -1,11 +1,11 @@
 import React, {useContext, useState} from 'react';
-import {Button, Typography, Row, Divider} from 'antd';
+import {Button, Typography, Row, Divider, Col} from 'antd';
 import {CheckCircleOutlined} from '@ant-design/icons';
 import {functions, firestore} from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 
 
-const {Title} = Typography;
+const {Title, Text} = Typography;
 const createStripeAccount = functions.httpsCallable('createStripeAccount');
 
 
@@ -54,6 +54,13 @@ export default function Finances() {
 
             <Row justify="right" style={{paddingBottom:20}}>
                 <Title level={3}>Invoices</Title> 
+            </Row>
+            <Row justify="center">
+                <Col>
+                <Row justify="center"><Text style={{fontSize:18, color:"gray"}}>Visit Stripe to view your invoice history</Text></Row>
+                <Row justify="center">
+                <a target="_self" rel="noreferrer" href={`https://dashboard.stripe.com/`}><Text style={{color:"blue", fontSize:18}}>{`Stripe`}</Text></a></Row>
+                </Col>
             </Row>
 
         </div>

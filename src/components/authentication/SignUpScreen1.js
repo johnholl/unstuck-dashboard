@@ -33,9 +33,7 @@ export default function SignUpScreen1(props) {
     }
 
       if(user!==null){
-          return(
-              <div>{`You're already signed in!`}</div>
-          )
+          props.history.push('/signup/2');
       }
 
     return(

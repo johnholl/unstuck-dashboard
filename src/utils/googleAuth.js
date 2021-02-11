@@ -14,7 +14,6 @@ const { user } = useContext(UserContext);
 
 React.useEffect(() => {
   (async function () {
-    console.log(user.uid);
     const userDoc = await firestore.collection('users').doc(user.uid).get();
     if (userDoc.exists) {
       setAuthed(userDoc.data().authed);
@@ -27,6 +26,7 @@ React.useEffect(() => {
 
   const responseGoogle = (response) => {
     // send the authorization token to firebase
+    console.log("RESPONSE", response);
     firestore
       .collection('users')
       .doc(user.uid)

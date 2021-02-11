@@ -14,7 +14,7 @@ export default function SignIn(props) {
   async function googleSignUp() {
     try {
         await auth.signInWithPopup(googleAuthProvider);
-        props.history.push('/dashboard');
+        props.history.push('/dashboard/bookings');
     } catch(err) {
         console.log(err);
 

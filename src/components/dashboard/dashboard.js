@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Route, Link } from 'react-router-dom';
-import { Layout, Menu, Button, Modal, Typography, Row, Tooltip, Col, Image } from 'antd';
+import { Layout, Menu, Button, Modal, Typography, Row, Tooltip, Col, Image, Divider } from 'antd';
 import {
   UserOutlined,
   ClockCircleOutlined,
@@ -26,13 +26,10 @@ const { Header, Content, Footer, Sider } = Layout;
 export default function Dashboard(props) {
   const [visible, setVisible] = useState(false);
   const { user } = useContext(UserContext);
-
-
-  console.log(props);
-  console.log(props.location.pathname.split("/").pop());
+  console.log("USER", user);
 
   const onMenuChange = (value) => {
-    props.history.push('/dashboard/' + value.key);
+    props.history.push('/' + value.key);
   };
 
   const signOut = () => {
@@ -66,13 +63,42 @@ export default function Dashboard(props) {
       </Modal>
       <Header style={{ backgroundColor:purple[6], height:100 }}>
         <Row justify="space-between" align="middle" style={{paddingTop:0, height:"100%"}}>
-          <Link to="/dashboard/bookings">
+          <Link to="/bookings">
           <img src={logo} width={200} />
           </Link>
-          <Col>
+          <Col span={8}>
+          <Row justify={"space-between"}>
+              <Col span={7}>
+              <a target="_self" rel="noreferrer" href={'https://unstuck.booking.johnholler.com/profile/' + user.uid}>
+                        <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Profile</Text>
+                    </a>
+                </Col>
+                <Col span={1}><Divider type="vertical" style={{backgroundColor:"white"}}/></Col>
+                <Col span={7}>
+                <Link
+                        to={{
+                          pathname: 'https://unstuck.johnholler.com',
+                        }}
+                      >
+                        <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Docs</Text>
+                      </Link> 
+                </Col>
+                <Col span={1}><Divider type="vertical" style={{backgroundColor:"white"}}/></Col>
+                <Col span={7}>
+                <Link
+                        to={{
+                          pathname: 'https://unstuck.johnholler.com',
+                        }}
+                      >
+                        <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Notifications</Text>
+                      </Link> 
+                </Col>
+          </Row>
+          </Col>
+          <Col span={8}>
             <Text style={{color:"white"}}>{user.email + " " }</Text>
             <Tooltip placement="bottom" title="sign out">
-              <Button onClick={openSignOutModal} icon={<ExportOutlined/>} ghost={true}/>
+              <Button size="small" onClick={openSignOutModal} icon={<ExportOutlined style={{fontSize:12, color:"white"}}/>} type="text"/>
             </Tooltip>
           </Col>
         </Row>
@@ -116,11 +142,11 @@ export default function Dashboard(props) {
             style={{position:"absolute", bottom:"0", left:"0"}}/>
         </Sider>
         <Content style={{ margin: '24px 16px 0' }}>
-          <Route path="/dashboard/profile" component={Profile} />
-          <Route path="/dashboard/bookings" component={Bookings} />
-          <Route path="/dashboard/services" component={Services} />
-          <Route path="/dashboard/availability" component={Availability} />
-          <Route path="/dashboard/finances" component={Finances} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/bookings" component={Bookings} />
+          <Route path="/services" component={Services} />
+          <Route path="/availability" component={Availability} />
+          <Route path="/finances" component={Finances} />
         </Content>
       </Layout>
       <Footer style={{ textAlign: 'center', backgroundColor:"white" }}>
