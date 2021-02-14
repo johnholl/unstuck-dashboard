@@ -29,7 +29,7 @@ export default function Dashboard(props) {
   console.log("USER", user);
 
   const onMenuChange = (value) => {
-    props.history.push('/' + value.key);
+    props.history.push('/dashboard/' + value.key);
   };
 
   const signOut = () => {
@@ -63,7 +63,7 @@ export default function Dashboard(props) {
       </Modal>
       <Header style={{ backgroundColor:purple[6], height:100 }}>
         <Row justify="space-between" align="middle" style={{paddingTop:0, height:"100%"}}>
-          <Link to="/bookings">
+          <Link to="/dashboard/bookings">
           <img src={logo} width={200} />
           </Link>
           <Col span={8}>
@@ -90,7 +90,7 @@ export default function Dashboard(props) {
                           pathname: 'https://unstuck.johnholler.com',
                         }}
                       >
-                        <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Notifications</Text>
+                        <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>unstuck.com</Text>
                       </Link> 
                 </Col>
           </Row>
@@ -142,11 +142,11 @@ export default function Dashboard(props) {
             style={{position:"absolute", bottom:"0", left:"0"}}/>
         </Sider>
         <Content style={{ margin: '24px 16px 0' }}>
-          <Route path="/profile" component={Profile} />
-          <Route path="/bookings" component={Bookings} />
-          <Route path="/services" component={Services} />
-          <Route path="/availability" component={Availability} />
-          <Route path="/finances" component={Finances} />
+          <Route path="/dashboard/profile" component={Profile} />
+          <Route path="/dashboard/bookings" component={Bookings} />
+          <Route path="/dashboard/services" component={Services} />
+          <Route path="/dashboard/availability" component={Availability} />
+          <Route path="/dashboard/finances" component={Finances} />
         </Content>
       </Layout>
       <Footer style={{ textAlign: 'center', backgroundColor:"white" }}>

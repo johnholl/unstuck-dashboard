@@ -180,7 +180,7 @@ export default function Profile() {
           description: profileInfo.description ? profileInfo.description : "",
           website: profileInfo.website ? profileInfo.website : "",
           videolink: profileInfo.videolink ? profileInfo.videolink : "",
-          cancellation: profileInfo.cancellation,
+          cancellation: profileInfo.cancellation ? profileInfo.cancellation : "",
         }}
         onFinish={onFinish}
         validateMessages={validateMessages}

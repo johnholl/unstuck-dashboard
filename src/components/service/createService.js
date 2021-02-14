@@ -1,8 +1,11 @@
 import React, { useContext, useState} from 'react';
+import {Link} from 'react-router-dom'
 import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
+import logo from '../../basicLogo.png';
+
 
 const {Title} = Typography;
 
@@ -55,6 +58,13 @@ export default function CreateService(props) {
 
   return (
     <div style={{ padding: 24, minHeight: 360 }}>
+      <Row>
+        <Col>
+          <Link to="/dashboard/bookings">
+            <img src={logo} width={100} />
+          </Link>
+        </Col>
+      </Row>
       <Row justify="left">
         <Col span={12} offset={8}>
           <Row align="left">

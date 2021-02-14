@@ -19,12 +19,12 @@ export default function Application() {
   return user ? (
     <Router>
       <div className="App">
-        <Route path="/" component={Dashboard} />
+        {/* <Route path="/" component={Dashboard} /> */}
         {/* <Redirect from="/dashboard" to="dashboard/bookings" /> */}
         <Route path="/bookingInfo" component={bookingInfo} />
         <Route path="/newService" component={CreateService} />
         <Route path="/editService" component={EditService} />
-        {/* <Route path="/dashboard" component={Dashboard} /> */}
+        <Route path="/dashboard" component={Dashboard} />
         <Route path="/signup" component={SignUpScreen} />
 
       </div>
