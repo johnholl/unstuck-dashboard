@@ -13,24 +13,30 @@ export default function Finances() {
 
     const { user } = useContext(UserContext);
     const [stripeId, setStripeId] = useState(null)
+    const [chargesEnabled, setChargesEnabled] = useState(false);
     const [loaded, setLoaded] = useState(false)
 
     React.useEffect(() => {
         (async function () {
-            console.log(user);
             const userSnap = (await firestore.collection('users').doc(user.uid).get()).data(); 
-            console.log(userSnap);
+            setChargesEnabled(userSnap.chargesEnabled);
             setStripeId(userSnap.stripeId);
             setLoaded(true);
         })();
       }, []);
       
       
-    async function makeAccount() {
-        const result = await createStripeAccount();
+    async function goToStripe() {
+        let result = "";
+        if(stripeId) {
+            result = await createStripeAccount({uid: user.uid, stripeId});
+        }
+        else {
+            result = await createStripeAccount({uid: user.uid});
+        }
         console.log(result);
         console.log(result.data.accountLinks.url)
-        // window.location.href= result.data.accountLinks.url;
+        window.location.href= result.data.accountLinks.url;
     }
 
     if(!loaded){
@@ -43,12 +49,14 @@ export default function Finances() {
             <Row justify="right" style={{paddingBottom:20}}>
                 <Title level={3}>Stripe Account</Title> 
             </Row>
-            {stripeId 
+            {!stripeId && <Button onClick={goToStripe}>Connect</Button>}
+            {stripeId && !chargesEnabled && <Button onClick={goToStripe}>Finish Connecting</Button>}
+            {chargesEnabled && <Row align="top" justify="center"><CheckCircleOutlined style={{color:"green", fontSize:30, paddingRight:10}} /><Title level={4}>Payment Connected</Title></Row>}
+            {/* {stripeId 
             ? 
-                    <Row align="top" justify="center"><CheckCircleOutlined style={{color:"green", fontSize:30, paddingRight:10}} /><Title level={4}>Payment Connected</Title></Row>
+                    
                 : 
-                <Button onClick={makeAccount}>Connect Stripe</Button>
-                }
+                } */}
             
             <Divider/>
 
