@@ -40,7 +40,7 @@ export default function InvoiceModal(props) {
     async function onFinish(values) {
       try {
       setLoading(true)
-      await generateInvoice({key: makeid(24), user: booking.userid, service: booking.serviceid, customer: booking.customer, booking, bookingId: props.bookingId, ...values, paymentIntent: booking.paymentIntent, price: service.price}, {})
+      await generateInvoice({key: makeid(24), user: booking.userid, service: booking.serviceid, customer: booking.customer, booking, bookingId: props.bookingId, ...values, paymentIntent: booking.paymentIntent, price: values.price}, {})
       notification.open({
         message: 'Invoice sent',
         description:

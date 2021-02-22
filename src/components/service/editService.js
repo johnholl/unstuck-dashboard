@@ -18,19 +18,18 @@ const layout = {
 };
 
 const validateMessages = {
-  required: '${label} is required!',
+  required: 'required',
   types: {
-    email: '${label} is not valid email!',
-    number: '${label} is not a valid number!',
+    email: 'not valid email',
+    number: 'not a valid number!',
   },
   number: {
-    range: '${label} must be between ${min} and ${max}',
+    range: 'must be between ${min} and ${max}',
   },
 };
 
 export default function EditService(props) {
   const { user } = useContext(UserContext);
-  console.log(props.location.service)
   const [autoAppt, setAutoAppt] = useState(props.location.service.autoAppt);
 
   const onFinish = (values) => {
@@ -69,10 +68,10 @@ export default function EditService(props) {
           name: props.location.service.name ? props.location.service.name : '',
           price: props.location.service.price
             ? props.location.service.price
-            : '',
+            : 0,
           duration: props.location.service.duration
             ? props.location.service.duration
-            : '',
+            : 5,
           description: props.location.service.description
             ? props.location.service.description
             : '',
@@ -119,11 +118,9 @@ export default function EditService(props) {
         </Popover>
       </div>} name="duration"
                 rules={[
-                  {
-                    required: true,
-                  },
+                  {required: true},
                 ]}>
-            <InputNumber min={0} max={360} step={5} />
+            <InputNumber min={5} max={360} step={5} />
         </Form.Item>
         <Form.Item name="mintime" label={
         <div>
@@ -136,7 +133,7 @@ export default function EditService(props) {
                     required: true,
                   },
                 ]}>
-            <InputNumber min={0} max={360} step={1} />
+            <InputNumber min={0} max={365} step={1} />
         </Form.Item>
         <Form.Item name="maxtime" label={
         <div>

@@ -39,8 +39,6 @@ export default function Profile() {
   const [isAnonymous, setIsAnonymous] = React.useState(null);
   const [photoLoading, setPhotoLoading] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
-  // const [fileList, setFileList] = React.useState([]);
-  const [buttonText, setButtonText] = React.useState("book an appointment");
   const { user } = useContext(UserContext);
 
     const customUpload = async ({ onError, onSuccess, file }) => {
@@ -279,39 +277,6 @@ export default function Profile() {
           </Button>
         </Form.Item>
       </Form>
-      <Divider/>
-      <Row justify="right" style={{paddingBottom:20}}>
-      <Title level={3}>Embed your booking button</Title> 
-      </Row>
-      <Row justify="center" align="top">
-        <Col xl={12} sm={24}>
-        <Row justify="center">
-            <Col span={20}>
-              <Title level={4}>Set button text{" "}</Title>
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={20}>
-              <Input defaultValue={buttonText} onChange={(val)=>{console.log(val);setButtonText(val.target.value)}}/>
-            </Col>
-          </Row>
-          <Row justify="center">
-            <Col span={24} style={{paddingTop:50}}>
-              <span target="_top" style={{backgroundColor: "#722ed1", color: "white", height: "45px", textTransform: "uppercase", fontFamily: " helvetica neue, helvetica, arial, sans-serif", letterSpacing: '1px', lineHeight: "38px", padding: "3px", borderRadius: "3px", fontWeight: "500", fontSize: "14px", cursor: "pointer", display: "inline-block"}} rel="nofollow noopener noreferrer">{buttonText}</span>
-            </Col>
-          </Row>
-        </Col>
-        <Col xl={12} sm={24}>
-          <Paragraph>
-            <pre>
-              {`<p><a target="_top" style=" background-color: #722ed1; color: white; height: 40px; text-transform: uppercase; font-family: 'helvetica neue', helvetica, arial, sans-serif; letter-spacing: 1px; line-height: 38px; padding: 0 28px; border-radius: 3px; font-weight: 500; font-size: 14px; cursor: pointer; display: inline-block; " href="https://unstuck.booking.johnholler.com/serviceSelect/${user.uid}" rel="nofollow noopener noreferrer">${buttonText}</a></p>`}
-            </pre>
-          </Paragraph>
-        </Col>
-      </Row>
-
-
-
     </div>
   );
 }

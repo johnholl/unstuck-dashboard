@@ -41,7 +41,6 @@ export default function Availability() {
 
   React.useEffect(() => {
     (async function () {
-      console.log(user.uid);
       const userDoc = await firestore.collection('users').doc(user.uid).get();
       if (userDoc.exists) {
         setAuthed(userDoc.data().authed);
@@ -71,7 +70,7 @@ export default function Availability() {
     })();
   }, []);
 
-  async function onFinish(days) {
+  async function onFinish() {
     setUpdating(true);
     await sleep(1000);
     Object.entries(days).forEach(([key, value]) => {
@@ -82,7 +81,7 @@ export default function Availability() {
           .collection('availability')
           .doc(key)
           .set({ day: key, end: value.range[1]._d, start: value.range[0]._d })
-          .then(setUpdating(false)).catch((error) => console.log(error));;
+          .then(setUpdating(false)).catch((error) => console.log(error));
       } else {
         firestore
           .collection('users')
@@ -90,7 +89,7 @@ export default function Availability() {
           .collection('availability')
           .doc(key)
           .delete()
-          .then(setUpdating(false)).catch((error) => console.log(error));;
+          .then(setUpdating(false)).catch((error) => console.log(error));
       }
     });
   };
@@ -104,6 +103,9 @@ export default function Availability() {
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Connect Google Calendar</Title> 
       </Row>
+      <div style={{width:"50%"}}>
+        <p style={{textAlign:"left"}}>When you connect your calendar it lets Unstuck create events, invite customers, and check your calendar for event conflicts.</p> 
+      </div>
       {authed ?
         <Row align="top" justify="center"><CheckCircleOutlined style={{color:"green", fontSize:30, paddingRight:10}} /><Title level={4}>Calendar Connected</Title></Row>
         :
@@ -124,6 +126,9 @@ export default function Availability() {
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Weekly Availability</Title> 
       </Row>
+      <div style={{width:"50%"}}>
+        <p style={{textAlign:"left"}}>{`This will be displayed on your profile page, and we will use this weekly availability to set timeslots for your services. You can change your weekly availability at any time.`}</p> 
+      </div>
       <Form {...layout} name="nest-messages" onFinish={onFinish}>
         {days.map((day) => (
           <Form.Item key={day} label={day} style={{ marginBottom: 0 }}>

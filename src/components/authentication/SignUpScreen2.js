@@ -8,7 +8,6 @@ const {Title} = Typography;
   
 export default function SignUpScreen2(props) {
   const { user } = useContext(UserContext);
-  console.log(user);
 
   const next = () =>{
     props.history.push('/signup/3');

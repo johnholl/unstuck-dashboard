@@ -34,11 +34,10 @@ const {Title, Paragraph, Text} = Typography;
         setService(sv.data());
         const tempiv = await firestore.collection('tempinvoices').doc(bookingId).get();
         setInvoiceSent(tempiv.exists);
-        setInvoiceDisabled(bk.data().status==="declined" || tempiv.exists || bk.data().status==="requested")
+        setInvoiceDisabled(bk.data().status==="declined" || tempiv.exists || bk.data().status==="requested" || sv.data().price===0);
 
       } 
       catch(error) {
-        console.log('No such document!');
         console.log(error);
         setErr(err);
       }

@@ -26,7 +26,6 @@ React.useEffect(() => {
 
   const responseGoogle = (response) => {
     // send the authorization token to firebase
-    console.log("RESPONSE", response);
     firestore
       .collection('users')
       .doc(user.uid)

@@ -23,8 +23,6 @@ export default function SignUpScreen1(props) {
         try {
             const result = await auth.signInWithPopup(googleAuthProvider);
             const user = result.user;
-            console.log("RESULT");
-            console.log(result);
             await firestore.collection("users").doc(result.user.uid).set({email: user.email, name: user.displayName}, {merge: true});
             props.history.push('/signup/2');
         } catch(err) {

@@ -16,10 +16,10 @@ const layout = {
   };
 
   const validateMessages = {
-    required: 'required!',
+    required: 'required',
     types: {
-      email: '${label} is not valid email!',
-      number: '${label} is not a valid number!',
+      email: 'not a valid email',
+      number: 'not a valid number',
     },
     number: {
       range: '${label} must be between ${min} and ${max}',
@@ -83,7 +83,7 @@ export default function SignUpScreen4(props) {
           headline: serviceInfo.headline,
           description: serviceInfo.description,
           website: serviceInfo.website,
-          duration: 0,
+          duration: 5,
           autoAppt: true,
           mintime: 1,
           maxtime: 30
@@ -132,7 +132,7 @@ export default function SignUpScreen4(props) {
                     required: true,
                   },
                 ]}>
-            <InputNumber min={0} max={360} step={5} />
+            <InputNumber min={5} max={360} step={5} />
         </Form.Item>
         <Form.Item name="mintime" label={
         <div>
@@ -145,7 +145,7 @@ export default function SignUpScreen4(props) {
                     required: true,
                   },
                 ]}>
-            <InputNumber min={0} max={360} step={1} />
+            <InputNumber min={0} max={365} step={1} />
         </Form.Item>
         <Form.Item name="maxtime" label={
         <div>

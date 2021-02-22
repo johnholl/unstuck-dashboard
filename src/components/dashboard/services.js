@@ -64,6 +64,9 @@ export default function Services() {
     <Row justify="right" style={{paddingBottom:20}}>
       <Title level={3}>Manage Your Services</Title> 
     </Row>
+    <div style={{width:"50%"}}>
+        <p style={{textAlign:"left"}}>{`A service is a type of appointment. You can set a service's price, duration, and other details. Most service providers offer between two and four services.`} </p> 
+    </div>
     <Row justify="center">
       <Modal
         title="Delete service"

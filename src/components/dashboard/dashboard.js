@@ -8,17 +8,20 @@ import {
   FireOutlined,
   ExportOutlined,
   DollarOutlined,
+  RocketOutlined
 } from '@ant-design/icons';
 import { purple } from '@ant-design/colors';
 import '../../styles/dashboard.css';
 import { auth } from '../../firebase';
 import logo from '../../assets/unstuckwhitepng.png';
 import { UserContext } from '../../providers/UserProvider';
+import {landingUrl} from '../../constants';
 import Profile from './profile';
 import Bookings from './bookings';
 import Services from './services';
 import Availability from './availability';
 import Finances from './finances';
+import Share from './share';
 
 const {Text} = Typography;
 const { Header, Content, Footer, Sider } = Layout;
@@ -26,7 +29,6 @@ const { Header, Content, Footer, Sider } = Layout;
 export default function Dashboard(props) {
   const [visible, setVisible] = useState(false);
   const { user } = useContext(UserContext);
-  console.log("USER", user);
 
   const onMenuChange = (value) => {
     props.history.push('/dashboard/' + value.key);
@@ -77,7 +79,7 @@ export default function Dashboard(props) {
                 <Col span={7}>
                 <Link
                         to={{
-                          pathname: 'https://unstuck.johnholler.com',
+                          pathname: `${landingUrl}`,
                         }}
                       >
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Docs</Text>
@@ -87,7 +89,7 @@ export default function Dashboard(props) {
                 <Col span={7}>
                 <Link
                         to={{
-                          pathname: 'https://unstuck.johnholler.com',
+                          pathname: `${landingUrl}`,
                         }}
                       >
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>unstuck.com</Text>
@@ -107,12 +109,6 @@ export default function Dashboard(props) {
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
-          onBreakpoint={(broken) => {
-            console.log(broken);
-          }}
-          onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
-          }}
           style={{backgroundColor:"white", position:"relative", height:"800px"}}
         >
           <Menu
@@ -133,6 +129,9 @@ export default function Dashboard(props) {
             <Menu.Item key="profile" icon={<UserOutlined />}>
               <Text strong>profile</Text>
             </Menu.Item>
+            <Menu.Item key="share" icon={<RocketOutlined />}>
+              <Text strong>share</Text>
+            </Menu.Item>
             <Menu.Item key="finances" icon={<DollarOutlined />}>
               <Text strong>finances</Text>
             </Menu.Item>
@@ -147,6 +146,7 @@ export default function Dashboard(props) {
           <Route path="/dashboard/services" component={Services} />
           <Route path="/dashboard/availability" component={Availability} />
           <Route path="/dashboard/finances" component={Finances} />
+          <Route path="/dashboard/share" component={Share} />
         </Content>
       </Layout>
       <Footer style={{ textAlign: 'center', backgroundColor:"white" }}>

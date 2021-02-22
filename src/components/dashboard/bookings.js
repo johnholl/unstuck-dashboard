@@ -46,8 +46,6 @@ export default function Bookings() {
         moment.unix(booking.appointment).diff(value, 'hours') < 24 &&
         moment.unix(booking.appointment).diff(value, 'hours') > 0,
     );
-    console.log("DBKS");
-    console.log(dbks);
     setDayBookings(dbks);
     setSelectedDate(value);
     if(dbks.length>0){
@@ -93,9 +91,12 @@ export default function Bookings() {
 
   return (
     <div style={{ padding: 50, minHeight: 360 }}>
-      <Row justify="right" style={{paddingBottom:20}}>
+      <Row style={{paddingBottom:20}}>
         <Title level={3}>Booking Calendar</Title> 
       </Row>
+      <div style={{width:"50%"}}>
+        <p style={{textAlign:"left"}}>View upcoming bookings. Accepted bookings appear green, requested bookings appear orange, and declined bookings appear red. Click on a date to get more details on its bookings.</p> 
+      </div>
       <Calendar onSelect={onChange} dateCellRender={dateCellRender} />
       <Modal
         title={selectedDate.format("MM/DD/YYYY")}

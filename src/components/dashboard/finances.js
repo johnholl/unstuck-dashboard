@@ -34,8 +34,6 @@ export default function Finances() {
         else {
             result = await createStripeAccount({uid: user.uid});
         }
-        console.log(result);
-        console.log(result.data.accountLinks.url)
         window.location.href= result.data.accountLinks.url;
     }
 
@@ -49,6 +47,10 @@ export default function Finances() {
             <Row justify="right" style={{paddingBottom:20}}>
                 <Title level={3}>Stripe Account</Title> 
             </Row>
+            {!stripeId &&
+                <div style={{width:"50%"}}>
+                <p style={{textAlign:"left"}}>{"Follow the Stripe onboarding process to add automatic payment collection and invoicing to your Unstuck account."} </p> 
+                </div>}
             {!stripeId && <Button onClick={goToStripe}>Connect</Button>}
             {stripeId && !chargesEnabled && <Button onClick={goToStripe}>Finish Connecting</Button>}
             {chargesEnabled && <Row align="top" justify="center"><CheckCircleOutlined style={{color:"green", fontSize:30, paddingRight:10}} /><Title level={4}>Payment Connected</Title></Row>}
@@ -64,11 +66,11 @@ export default function Finances() {
                 <Title level={3}>Invoices</Title> 
             </Row>
             <Row justify="center">
-                <Col>
+            {stripeId &&<Col>
                 <Row justify="center"><Text style={{fontSize:18, color:"gray"}}>Visit Stripe to view your invoice history</Text></Row>
                 <Row justify="center">
                 <a target="_self" rel="noreferrer" href={`https://dashboard.stripe.com/`}><Text style={{color:"blue", fontSize:18}}>{`Stripe`}</Text></a></Row>
-                </Col>
+                </Col>}
             </Row>
 
         </div>

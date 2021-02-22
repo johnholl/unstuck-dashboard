@@ -35,10 +35,8 @@ export default function SignUpScreen3(props) {
   }
 
   async function onFinish(days) {
-    console.log(days);
     await Promise.all(Object.entries(days).map(async ([key, value]) => {
       if (value.range) {
-        console.log("VALUE", value);
         await firestore
           .collection('users')
           .doc(user.uid)
