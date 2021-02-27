@@ -26,6 +26,7 @@ export default function Application() {
         <Route path="/editService" component={EditService} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/signup" component={SignUpScreen} />
+        <Route path="/login" component={LoginScreen} />
 
       </div>
     </Router>

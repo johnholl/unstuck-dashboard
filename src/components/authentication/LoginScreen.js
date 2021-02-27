@@ -7,8 +7,9 @@ import { UserContext } from '../../providers/UserProvider';
 const {Title} = Typography;
 
 
-export default function SignIn(props) {
+export default function LoginScreen(props) {
   const { user } = useContext(UserContext);
+  console.log("YAYAYAYA");
 
 
   async function googleSignUp() {
@@ -21,11 +22,10 @@ export default function SignIn(props) {
     }
 }
 
-  if(user!==null){
-      return(
-          <div>{`You're already signed in!`}</div>
-      )
-  }
+    if(user!==null){
+        props.history.push('/dashboard/bookings');
+    }
+
 
   return (
     <div style={{ minHeight: 'calc(100vh - 10px)' }}>

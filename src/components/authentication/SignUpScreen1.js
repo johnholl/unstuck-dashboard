@@ -31,7 +31,7 @@ export default function SignUpScreen1(props) {
     }
 
       if(user!==null){
-          props.history.push('/signup/2');
+          props.history.push('/dashboard/bookings');
       }
 
     return(
