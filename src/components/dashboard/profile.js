@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Form, Input, Button, Spin, Popover, Row, Col, Typography, Divider, Radio, message, Upload, Avatar, Modal } from 'antd';
+import { Form, Input, Button, Spin, Popover, Row, Col, Typography, Divider, Radio, message, Upload, Avatar, Modal, Switch } from 'antd';
 import { LoadingOutlined, InfoCircleOutlined, UploadOutlined} from '@ant-design/icons';
 import { firestore, storage } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
@@ -114,6 +114,8 @@ export default function Profile() {
           website: '',
           videolink: '',
           cancellation:'',
+          publicprofile: true,
+          displayname: '',
         });
       }
     })();
@@ -179,10 +181,24 @@ export default function Profile() {
           website: profileInfo.website ? profileInfo.website : "",
           videolink: profileInfo.videolink ? profileInfo.videolink : "",
           cancellation: profileInfo.cancellation ? profileInfo.cancellation : "",
+          publicprofile: profileInfo.publicprofile ? profileInfo.publicprofile : true,
+          displayName: profileInfo.displayName ? profileInfo.displayName : '',
         }}
         onFinish={onFinish}
         validateMessages={validateMessages}
       >
+        <Form.Item
+          name={'publicprofile'}
+          label={
+            <div>
+            Public Profile{' '}
+            <Popover content="Select to make your profile page visible on Unstuck.">
+              <InfoCircleOutlined size="small" />
+            </Popover>
+          </div>
+            }>
+          <Switch size={"large"} style={{width: 100}} defaultChecked/>
+        </Form.Item>
         <Form.Item
           name={'name'}
           label="Name"
@@ -195,6 +211,12 @@ export default function Profile() {
           <Input />
         </Form.Item>
         <Form.Item
+          name={'displayName'}
+          label="Display Name"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
           name={'email'}
           label="Email"
           rules={[
@@ -203,7 +225,7 @@ export default function Profile() {
             },
           ]}
         >
-          <Input />
+          <Input disabled />
         </Form.Item>
         <Form.Item
           name={'headline'}

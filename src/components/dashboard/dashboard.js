@@ -71,7 +71,7 @@ export default function Dashboard(props) {
           <Col span={8}>
           <Row justify={"space-between"}>
               <Col span={7}>
-              <a target="_self" rel="noreferrer" href={'https://unstuck.booking.johnholler.com/profile/' + user.uid}>
+              <a target="_self" rel="noreferrer" href={'https://booking.unstuck.me/profile/' + user.uid}>
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Profile</Text>
                     </a>
                 </Col>
@@ -92,7 +92,7 @@ export default function Dashboard(props) {
                           pathname: `${landingUrl}`,
                         }}
                       >
-                        <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>unstuck.com</Text>
+                        <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>beunstuck.me</Text>
                       </Link> 
                 </Col>
           </Row>

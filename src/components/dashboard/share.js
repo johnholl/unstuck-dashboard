@@ -36,7 +36,7 @@ export default function Share() {
         <Col xl={12} sm={24}>
           <Paragraph>
             <pre>
-              {`<p><a target="_top" style=" background-color: #722ed1; color: white; height: 40px; text-transform: uppercase; font-family: 'helvetica neue', helvetica, arial, sans-serif; letter-spacing: 1px; line-height: 38px; padding: 0 28px; border-radius: 3px; font-weight: 500; font-size: 14px; cursor: pointer; display: inline-block; " href="https://unstuck.booking.johnholler.com/booking/${user.uid}/serviceSelect/" rel="nofollow noopener noreferrer">${buttonText}</a></p>`}
+              {`<p><a target="_top" style=" background-color: #722ed1; color: white; height: 40px; text-transform: uppercase; font-family: 'helvetica neue', helvetica, arial, sans-serif; letter-spacing: 1px; line-height: 38px; padding: 0 28px; border-radius: 3px; font-weight: 500; font-size: 14px; cursor: pointer; display: inline-block; " href="https://booking.beunstuck.me/booking/${user.uid}/serviceSelect/" rel="nofollow noopener noreferrer">${buttonText}</a></p>`}
             </pre>
           </Paragraph>
         </Col>
@@ -50,7 +50,7 @@ export default function Share() {
                 <p style={{textAlign:"right", fontWeight:'700'}}>Link to your profile page: </p>
             </Col>
             <Col span={8}>
-                <a href={`${bookingUrl}/booking/${user.uid}/serviceSelect/`}>{`https://unstuck.booking.johnholler.com/booking/${user.uid}/serviceSelect/`}</a>
+                <a href={`${bookingUrl}/booking/${user.uid}/serviceSelect/`}>{`https://booking.beunstuck.me/profile/${user.uid}/`}</a>
             </Col>
         </Row>
         <Row gutter={[16]}>

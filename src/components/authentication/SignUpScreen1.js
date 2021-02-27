@@ -41,69 +41,6 @@ export default function SignUpScreen1(props) {
                     <Row justify="center">
                     <Title level={3}>Get Started</Title>
                     </Row>
-                    {/* <Form {...layout} onFinish={onFinish} size="large">
-                    <Form.Item
-                        name={'name'}
-                        rules={[
-                            {
-                            required: true,
-                            message: "Please enter your name"
-                            },
-                        ]}
-                        >
-                        <Input placeholder={"Your name"}/>
-                        </Form.Item>
-                        <Form.Item
-                        name={'userEmail'}
-                        rules={[
-                            {
-                            required: true,
-                            message: "Please input a valid email address"
-                            },
-                        ]}
-                        >
-                        <Input placeholder={"email@example.com"}/>
-                        </Form.Item>
-                        <Form.Item
-                        name={'userPassword'}
-                        rules={[
-                            {
-                            required: true,
-                            message: "Please input a valid password"
-                            },
-                        ]}
-                        >
-                        <Input.Password placeholder={"password"} />
-                        </Form.Item>
-                        <Form.Item
-                        name={'confirmPassword'}
-                        dependencies={['userPassword']}
-                        hasFeedback
-                        rules={[
-                            {
-                              required: true,
-                              message: 'Please confirm your password!',
-                            },
-                            ({ getFieldValue }) => ({
-                              validator(rule, value) {
-                                if (!value || getFieldValue('userPassword') === value) {
-                                  return Promise.resolve();
-                                }
-                                return Promise.reject('Passwords do not match');
-                              },
-                            }),
-                          ]}
-                        >
-                        <Input.Password placeholder={"confirm password"} />
-                        </Form.Item>
-                        <Row justify="center">
-                        <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            sign up and get started
-                        </Button>
-                        </Form.Item>
-                        </Row>
-                    </Form> */}
                     <Row justify="center" style={{paddingTop:20, paddingBottom:20}}>
                         <Button size="large" type="secondary" style={{width:"50%"}} onClick={googleSignUp}>
                             <GoogleOutlined/> Sign up with Google
