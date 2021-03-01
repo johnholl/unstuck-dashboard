@@ -37,7 +37,7 @@ export default function SignUpScreen1(props) {
     return(
         <div>
             <Row justify="center">
-                <Col span={8}>
+                <Col span={12}>
                     <Row justify="center">
                     <Title level={3}>Get Started</Title>
                     </Row>

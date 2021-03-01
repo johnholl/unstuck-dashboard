@@ -15,7 +15,7 @@ export default function SignUpScreen() {
             <img src={logo} width={300} />
             </Row>
             <Row justify="center" style={{paddingTop:50}}>
-                <Col span={24}>
+                <Col>
                 <Route path="/signup/1" component={SignUpScreen1} />
                 <Route path="/signup/2" component={SignUpScreen2} />  
                 <Route path="/signup/3" component={SignUpScreen3} />  
