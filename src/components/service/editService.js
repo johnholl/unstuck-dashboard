@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {Link} from 'react-router-dom'
-import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography} from 'antd';
+import { Form, Input, InputNumber, Button, Switch, Popover, Row, Col, Typography, notification} from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
@@ -33,14 +33,25 @@ export default function EditService(props) {
   const [autoAppt, setAutoAppt] = useState(props.location.service.autoAppt);
 
   const onFinish = (values) => {
-    firestore
+    if(user.chargesEnabled && values.price > 0) {
+      firestore
       .collection('users')
       .doc(user.uid)
       .collection('services')
       .doc(props.location.service.id)
       .set({...values, autoAppt})
       .then(() => props.history.push('dashboard/services'));
-  };
+      }
+    else {
+      notification.open({
+        message: 'Unable to update',
+        description:
+          `Your Stripe account isn't complete. You must finish it before you can make a paid service.`,
+          duration: 5,
+      });
+      }
+    }
+
 
   return (
     <div style={{ padding: 24, minHeight: 360, justifyContent: 'center' }}>

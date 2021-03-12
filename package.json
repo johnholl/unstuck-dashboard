@@ -16,6 +16,7 @@
     "http2": "^3.3.7",
     "mandrill-api": "^1.0.45",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

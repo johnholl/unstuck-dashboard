@@ -15,7 +15,6 @@ import '../../styles/dashboard.css';
 import { auth } from '../../firebase';
 import logo from '../../assets/unstuckwhitepng.png';
 import { UserContext } from '../../providers/UserProvider';
-import {landingUrl} from '../../constants';
 import Profile from './profile';
 import Bookings from './bookings';
 import Services from './services';
@@ -71,29 +70,21 @@ export default function Dashboard(props) {
           <Col span={8}>
           <Row justify={"space-between"}>
               <Col span={7}>
-              <a target="_self" rel="noreferrer" href={'https://booking.unstuck.me/profile/' + user.uid}>
+              <a target="_self" rel="noreferrer" href={'https://booking.beunstuck.me/profile/' + user.uid}>
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Profile</Text>
                     </a>
                 </Col>
                 <Col span={1}><Divider type="vertical" style={{backgroundColor:"white"}}/></Col>
                 <Col span={7}>
-                <Link
-                        to={{
-                          pathname: `${landingUrl}`,
-                        }}
-                      >
+                    <a target="_self" rel="noreferrer" href={'https://beunstuck.me/faq'}>
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Docs</Text>
-                      </Link> 
+                    </a>
                 </Col>
                 <Col span={1}><Divider type="vertical" style={{backgroundColor:"white"}}/></Col>
                 <Col span={7}>
-                <Link
-                        to={{
-                          pathname: `${landingUrl}`,
-                        }}
-                      >
+                    <a target="_self" rel="noreferrer" href={'https://beunstuck.me/'}>
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>beunstuck.me</Text>
-                      </Link> 
+                    </a>
                 </Col>
           </Row>
           </Col>

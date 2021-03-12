@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { Button, Form, TimePicker, Spin, Row, Col, Popover, Divider, Typography} from 'antd';
+import { Button, Form, TimePicker, Spin, Row, Col, Popover, Divider, Typography, Select} from 'antd';
 import { LoadingOutlined, InfoCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import sleep from '../../utils/timing';
@@ -10,6 +10,7 @@ import GoogleAuth from '../../utils/googleAuth';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 const {Title} = Typography;
+const { Option } = Select;
 
 const { RangePicker } = TimePicker;
 
@@ -36,6 +37,10 @@ export default function Availability() {
   const [availability, setAvailability] = React.useState(null);
   const [updating, setUpdating] = React.useState(false);
   const [authed, setAuthed] = React.useState(false);
+  const [timezones, setTimezones] = React.useState(false);
+  const [timezone, setTimezone] = React.useState(false);
+  const [initialTz, setInitialTz] = React.useState(null);
+
 
   const { user } = useContext(UserContext);
 
@@ -49,6 +54,8 @@ export default function Availability() {
         setAuthed(false);
       }
     })();
+    const tzs = moment.tz.names();
+    setTimezones(tzs);
   }, []);
 
   React.useEffect(() => {
@@ -67,13 +74,18 @@ export default function Availability() {
         };
       });
       setAvailability(av);
+      const userdoc = (await firestore.collection('users').doc(user.uid).get()).data();
+      const tz = userdoc.tz ? userdoc.tz : moment.tz.guess();
+      moment.tz.setDefault(tz);
+      setTimezone(tz);
+      setInitialTz(tz);
     })();
   }, []);
 
-  async function onFinish() {
+  async function onFinish(values) {
     setUpdating(true);
     await sleep(1000);
-    Object.entries(days).forEach(([key, value]) => {
+    Object.entries(values).forEach(([key, value]) => {
       if (value.range !== null) {
         firestore
           .collection('users')
@@ -91,10 +103,11 @@ export default function Availability() {
           .delete()
           .then(setUpdating(false)).catch((error) => console.log(error));
       }
+      firestore.collection('users').doc(user.uid).set({tz: timezone}, {merge: true}).then(()=>{});
     });
   };
 
-  if (!availability) {
+  if (!availability || initialTz===null) {
     return <div></div>;
   }
 
@@ -126,6 +139,11 @@ export default function Availability() {
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Weekly Availability</Title> 
       </Row>
+      <Select defaultValue={initialTz} style={{ width: 240 }} onChange={(val)=>{setTimezone(val)}}>
+        {timezones.map(tz =>
+          <Option value={tz} key={tz}>{tz}</Option>
+        )}
+      </Select>
       <div style={{width:"50%"}}>
         <p style={{textAlign:"left"}}>{`This will be displayed on your profile page, and we will use this weekly availability to set timeslots for your services. You can change your weekly availability at any time.`}</p> 
       </div>
@@ -142,7 +160,7 @@ export default function Availability() {
                   : null
               }
             >
-              <RangePicker use12Hours format="h:mm a" minuteStep={15} />
+              <RangePicker use12Hours format="h:mm a" minuteStep={15} dateRender={()=>{moment.tz.setDefault(timezone)}}/>
             </Form.Item>
             </Row>
           </Form.Item>
