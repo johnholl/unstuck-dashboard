@@ -33,12 +33,13 @@ const days = [
   'Sunday',
 ];
 
+
 export default function Availability() {
   const [availability, setAvailability] = React.useState(null);
   const [updating, setUpdating] = React.useState(false);
   const [authed, setAuthed] = React.useState(false);
   const [timezones, setTimezones] = React.useState(false);
-  const [timezone, setTimezone] = React.useState(false);
+  const [timezone, setTimezone] = React.useState(null);
   const [initialTz, setInitialTz] = React.useState(null);
 
 
@@ -66,17 +67,17 @@ export default function Availability() {
         .collection('availability')
         .get();
       const av = [];
+      const userdoc = (await firestore.collection('users').doc(user.uid).get()).data();
+      const tz = userdoc.tz ? userdoc.tz : moment.tz.guess();
       querySnapshot.forEach((doc) => {
         const datkey = doc.id;
         av[datkey] = {
-          start: moment(doc.data().start.seconds * 1000),
-          end: moment(doc.data().end.seconds * 1000),
+          start: moment.tz(doc.data().start, tz),
+          end: moment.tz(doc.data().end, tz),
         };
       });
       setAvailability(av);
-      const userdoc = (await firestore.collection('users').doc(user.uid).get()).data();
-      const tz = userdoc.tz ? userdoc.tz : moment.tz.guess();
-      moment.tz.setDefault(tz);
+
       setTimezone(tz);
       setInitialTz(tz);
     })();
@@ -87,12 +88,15 @@ export default function Availability() {
     await sleep(1000);
     Object.entries(values).forEach(([key, value]) => {
       if (value.range !== null) {
+        console.log("VALUE", value);
+        console.log("ORIGINAL MOMENT", value.range[1].format())
+        console.log("CONVERTED MOMENT", value.range[1].tz(timezone, true).format());
         firestore
           .collection('users')
           .doc(user.uid)
           .collection('availability')
           .doc(key)
-          .set({ day: key, end: value.range[1]._d, start: value.range[0]._d })
+          .set({ day: key, end: value.range[1].tz(timezone, true).format('YYYY-MM-DDTHH:mm:SS'), start: value.range[0].tz(timezone, true).format('YYYY-MM-DDTHH:mm:SS') })
           .then(setUpdating(false)).catch((error) => console.log(error));
       } else {
         firestore
@@ -107,7 +111,7 @@ export default function Availability() {
     });
   };
 
-  if (!availability || initialTz===null) {
+  if (!availability || initialTz===null || timezone===null) {
     return <div></div>;
   }
 
@@ -136,19 +140,28 @@ export default function Availability() {
     }
 
       <Divider/>
-      <Row justify="right" style={{paddingBottom:20}}>
-        <Title level={3}>Weekly Availability</Title> 
-      </Row>
-      <Select defaultValue={initialTz} style={{ width: 240 }} onChange={(val)=>{setTimezone(val)}}>
+      <Row justify="right" style={{paddingBottom:20}} align="middle">
+        <Title level={3}>Timezone</Title> 
+      <Col span={12}>
+      <Select defaultValue={initialTz} onChange={(val)=>
+        {setTimezone(val);
+        firestore.collection('users').doc(user.uid).set({tz: val}, {merge: true}).then(()=>{});
+        }} style={{width:240}}>
         {timezones.map(tz =>
           <Option value={tz} key={tz}>{tz}</Option>
         )}
       </Select>
+      </Col>
+      </Row>
+      <Divider/>
+      <Row justify="right" style={{paddingBottom:20}}>
+        <Title level={3}>Weekly Availability</Title> 
+      </Row>
       <div style={{width:"50%"}}>
         <p style={{textAlign:"left"}}>{`This will be displayed on your profile page, and we will use this weekly availability to set timeslots for your services. You can change your weekly availability at any time.`}</p> 
       </div>
       <Form {...layout} name="nest-messages" onFinish={onFinish}>
-        {days.map((day) => (
+        {days.map((day) => 
           <Form.Item key={day} label={day} style={{ marginBottom: 0 }}>
             <Row>
             <Form.Item
@@ -156,15 +169,15 @@ export default function Availability() {
               style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
               initialValue={
                 availability[day]
-                  ? [availability[day]['start'], availability[day]['end']]
+                  ? [moment.tz(availability[day]['start'], timezone), moment.tz(availability[day]['end'], timezone)]
                   : null
               }
             >
-              <RangePicker use12Hours format="h:mm a" minuteStep={15} dateRender={()=>{moment.tz.setDefault(timezone)}}/>
+              <RangePicker use12Hours format="h:mm a" minuteStep={15}/>
             </Form.Item>
             </Row>
-          </Form.Item>
-        ))}
+          </Form.Item>)
+        }
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Row>
           <Button type="primary" htmlType="submit" disabled={updating} style={{width:"calc(50% - 8px)"}}>
