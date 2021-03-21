@@ -1,9 +1,12 @@
 import React, {useContext} from 'react';
-import { Typography, Row, Col, Button, TimePicker, Form } from 'antd';
+import { Typography, Row, Col, Button, TimePicker, Form, Select, Divider } from 'antd';
+import moment from 'moment-timezone';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 
 const {Title} = Typography;
+const { Option } = Select;
+
 
 const { RangePicker } = TimePicker;
 
@@ -30,6 +33,7 @@ const days = [
 export default function SignUpScreen3(props) {
   const { user } = useContext(UserContext);
 
+
   const next = () =>{
     props.history.push('/signup/4');
   }
@@ -42,7 +46,7 @@ export default function SignUpScreen3(props) {
           .doc(user.uid)
           .collection('availability')
           .doc(key)
-          .set({ day: key, end: value.range[1]._d, start: value.range[0]._d })
+          .set({ day: key, end: value.range[1].format('YYYY-MM-DDTHH:mm:00'), start: value.range[0].format('YYYY-MM-DDTHH:mm:00') })
       }
     }));
     props.history.push('/signup/4')
@@ -59,22 +63,38 @@ export default function SignUpScreen3(props) {
     return(
       <div>
         <Row justify="center">
-          <Col span={8}>
+          <Col span={12}>
             <Row justify="center">
-            <Title level={3}>Set Your Availability</Title>
-            <Title level={5}>{`We'll use these times to create your appointment slots. You can make changes later.`}</Title>
+              <Title level={3}>Set Your Availability</Title>
+              <Title level={5}>{`We'll use these times to create your appointment slots. You can make changes later.`}</Title>
             </Row>
-            </Col>
+          </Col>
+        </Row>
+        <Row justify="center">
+          <Col span={12}>
+            <Row align="middle" style={{padding:40}}>
+              <Col span={8}>
+                <font style={{align:"right"}}>Timezone</font> 
+              </Col>
+              <Col span={16}>
+                <Select defaultValue={moment.tz.guess()} onChange={(val)=>
+                  {
+                  firestore.collection('users').doc(user.uid).set({tz: val}, {merge: true}).then(()=>{});
+                  }} style={{width:240}}>
+                  {moment.tz.names().map(tz =>
+                    <Option value={tz} key={tz}>{tz}</Option>
+                  )}
+                </Select>
+              </Col>
             </Row>
-            <Row justify="center">
-                <Col span={12}>
-                <Form {...layout} name="nest-messages" onFinish={onFinish}>
+            <Divider/>
+          <Form {...layout} name="nest-messages" onFinish={onFinish}>
             {days.map((day) => (
-          <Form.Item key={day} label={day} style={{ marginBottom: 0 }}>
+          <Form.Item key={day} label={day} style={{ marginBottom: 0 }} colon={false}>
             <Row>
             <Form.Item
               name={[day, 'range']}
-              style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+              style={{ display: 'inline-block', width: 'calc(100% - 8px)' }}
             >
               <RangePicker use12Hours format="h:mm a" minuteStep={15} />
             </Form.Item>

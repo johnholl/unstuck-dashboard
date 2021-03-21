@@ -42,25 +42,15 @@ export default function SignUpScreen1(props) {
                     <Title level={3}>Get Started</Title>
                     </Row>
                     <Row justify="center" style={{paddingTop:20, paddingBottom:20}}>
-                        <Button size="large" type="secondary" style={{width:"50%"}} onClick={googleSignUp}>
+                        <Button size="large" type="secondary" onClick={googleSignUp}>
                             <GoogleOutlined/> Sign up with Google
                         </Button>
                     </Row>
                     <Row justify="center">
-                        <Col span={12}>
-                        By continuing, you’re agreeing to our Customer Terms of Service, Privacy Policy, and Cookie Policy.
-                        </Col>
+                        By continuing, you’re agreeing to our <a href="https://beunstuck.me/privacy-policy-2/">Customer Terms of Service</a>
+                         &nbsp; and
+                         <a href="https://beunstuck.me/%E2%80%8Dterms-of-use/">Privacy Policy</a>.
                     </Row>
-                    {/* <Row justify="center" style={{padding:20}}>
-                        <Button type="secondary" style={{width:"50%"}}>
-                            Sign up with Facebook
-                        </Button>
-                    </Row>
-                    <Row justify="center" style={{padding:20}}>
-                        <Button type="secondary" style={{width:"50%"}}>
-                            Sign up with Apple
-                        </Button>
-                    </Row> */}
                 </Col>
             </Row>
       </div>

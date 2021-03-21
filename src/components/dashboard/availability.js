@@ -96,7 +96,7 @@ export default function Availability() {
           .doc(user.uid)
           .collection('availability')
           .doc(key)
-          .set({ day: key, end: value.range[1].tz(timezone, true).format('YYYY-MM-DDTHH:mm:SS'), start: value.range[0].tz(timezone, true).format('YYYY-MM-DDTHH:mm:SS') })
+          .set({ day: key, end: value.range[1].tz(timezone, true).format('YYYY-MM-DDTHH:mm:00'), start: value.range[0].tz(timezone, true).format('YYYY-MM-DDTHH:mm:00') })
           .then(setUpdating(false)).catch((error) => console.log(error));
       } else {
         firestore
