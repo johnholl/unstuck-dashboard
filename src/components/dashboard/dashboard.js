@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Route, Link } from 'react-router-dom';
-import { Layout, Menu, Button, Modal, Typography, Row, Tooltip, Col, Image, Divider } from 'antd';
+import { Layout, Menu, Button, Modal, Typography, Row, Tooltip, Col, Image, Dropdown, Badge, Divider } from 'antd';
 import {
   UserOutlined,
   ClockCircleOutlined,
@@ -8,11 +8,12 @@ import {
   FireOutlined,
   ExportOutlined,
   DollarOutlined,
-  RocketOutlined
+  RocketOutlined,
+  BellOutlined,
 } from '@ant-design/icons';
 import { purple } from '@ant-design/colors';
 import '../../styles/dashboard.css';
-import { auth } from '../../firebase';
+import { auth, firestore } from '../../firebase';
 import logo from '../../assets/unstuckwhitepng.png';
 import { UserContext } from '../../providers/UserProvider';
 import Profile from './profile';
@@ -28,6 +29,54 @@ const { Header, Content, Footer, Sider } = Layout;
 export default function Dashboard(props) {
   const [visible, setVisible] = useState(false);
   const { user } = useContext(UserContext);
+  const [menu, setMenu] = useState(null);
+  const [notificationLen, setNotificationLen] = useState(0);
+
+
+  React.useEffect(() => {
+    (async function () {
+      const snap = await firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('bookings')
+        .get();
+      const bks = [];
+      snap.forEach((doc) => {
+        let bs = null;
+        if (doc.data().status === 'requested') {
+          bs = 'warning';
+        } else if (doc.data().status === 'accepted') {
+          bs = 'success';
+        } else {
+          bs = 'error';
+        }
+        bks.push({ ...doc.data(), id: doc.id, badgeStatus: bs });
+      });
+
+      const reqbookings = bks.filter(booking => (booking.status==="requested"));
+      setNotificationLen(reqbookings.length);
+
+      const m = (
+        <Menu>
+          {reqbookings.map(booking => (
+            <Menu.Item key={booking.id}>
+              <Link
+                to={{
+                  pathname: '/bookingInfo',
+                  state: {
+                    bookingNumber: booking.id,
+                  },
+                }}
+                key={booking.id}
+              >
+                {`(respond) requested booking with ${booking.customerName}`}
+              </Link>
+            </Menu.Item>))}
+        </Menu>
+      );
+      setMenu(m);
+    })();
+  }, []);
 
   const onMenuChange = (value) => {
     props.history.push('/dashboard/' + value.key);
@@ -89,7 +138,12 @@ export default function Dashboard(props) {
           </Row>
           </Col>
           <Col span={8}>
-            <Text style={{color:"white"}}>{user.email + " " }</Text>
+            <Dropdown overlay={menu}>
+              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                <font style={{color:"white", fontWeight:"700", fontSize:24}}><BellOutlined/></font><Badge count={notificationLen} size="small" offset={[-5,-20]}/>
+              </a>
+            </Dropdown>
+            <Text style={{color:"white"}}>{" " + user.email + " " }</Text>
             <Tooltip placement="bottom" title="sign out">
               <Button size="small" onClick={openSignOutModal} icon={<ExportOutlined style={{fontSize:12, color:"white"}}/>} type="text"/>
             </Tooltip>
