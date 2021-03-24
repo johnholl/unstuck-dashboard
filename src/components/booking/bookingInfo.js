@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import {Link} from 'react-router-dom'
 import { Button, Space, Row, Col, Typography, Divider, Modal, Input, Form, InputNumber, Popover } from 'antd';
-import { InfoCircleOutlined} from '@ant-design/icons';
+import { InfoCircleOutlined, LoadingOutlined} from '@ant-design/icons';
 import moment from 'moment';
 import { firestore, functions } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import logo from '../../basicLogo.png';
 
-const acceptBooking = functions.httpsCallable('acceptBooking');
+const acceptBooking = functions.httpsCallable('events-acceptBooking');
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 export default function BookingInfo(props) {
   const { user } = useContext(UserContext);
@@ -19,6 +20,7 @@ export default function BookingInfo(props) {
   const [acceptVisible, setAcceptVisible] = React.useState(false);
   const [declineMessage, setDeclineMessage] = React.useState("");
   const [invoiceDisabled, setInvoiceDisabled] = React.useState(null);
+  const [accepting, setAccepting] = React.useState(false);
 
   const [err, setErr] = React.useState(null);
 
@@ -62,14 +64,17 @@ const validateMessages = {
   }, []);
 
   async function onAccept(values) {
-    try {
-    // await firestore.collection('users').doc(user.uid).collection('bookings').doc(bookingId).update({ status: 'accepted', price:values.price })
-    setBooking({ ...booking, status: 'accepted', price:values.price});
-    await acceptBooking({bid: bookingId, uid: user.uid})
+    setAccepting(true);
+    if(booking.paymentIntent){
+      await acceptBooking({bid: bookingId, uid: user.uid, price:values.price});
+      setBooking({ ...booking, status: 'accepted', price:values.price});
     }
-    catch(error) {
-        console.log('Unable to update status: ', error);
-      };
+    else {
+      await acceptBooking({bid: bookingId, uid: user.uid, price:0});
+      setBooking({ ...booking, status: 'accepted', price:0});
+    }
+    setAccepting(false);
+    setAcceptVisible(false);
   };
 
   const onDecline = () => {
@@ -126,7 +131,7 @@ const validateMessages = {
             <Form.Item labelCol={{}} wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
               <Row>
                 <Button type="primary" htmlType="submit" style={{width:'80%'}}>
-                  Send
+                  {!accepting ? "Send" : antIcon }
                 </Button>
               </Row>
             </Form.Item>
@@ -179,8 +184,15 @@ const validateMessages = {
           {booking.status === 'requested' ? (
           <div>
             <Space size="large">
-              <Button type="primary" onClick={setAcceptVisible}>
-                Accept
+              <Button type="primary" onClick={() => {
+                if(booking.paymentIntent){
+                  setAcceptVisible(true);
+                }
+                else{
+                  onAccept();
+                }
+                }}>
+                {!accepting ? "Accept" : antIcon }
               </Button>
               <Button type="danger" onClick={() => setDeclineVisible(true)}>
                 Decline
