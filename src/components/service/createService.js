@@ -33,6 +33,9 @@ export default function CreateService(props) {
   const { user } = useContext(UserContext);
   const [serviceInfo, setServiceInfo] = useState(null);
   const [autoAppt, setAutoAppt] = useState(true);
+  const [userInfo, setUserInfo] = useState(true);
+  console.log(props);
+
   React.useEffect(() => {
     setServiceInfo({
       name: '',
@@ -41,16 +44,19 @@ export default function CreateService(props) {
       description: '',
       tags: '',
     });
+
+    firestore.collection('users').doc(user.uid).get().then(doc => {
+      setUserInfo(doc.data());
+    })
   }, []);
 
   const onFinish = (values) => {
-    if(user.chargesEnabled && values.price > 0) {
+    if((userInfo.chargesEnabled && values.price>0) || values.price===0) {
       firestore
       .collection('users')
       .doc(user.uid)
       .collection('services')
-      .doc(props.location.service.id)
-      .set({...values, autoAppt})
+      .add({...values, autoAppt})
       .then(() => props.history.push('dashboard/services'));
       }
     else {

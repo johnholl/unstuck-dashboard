@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import {Link} from 'react-router-dom'
-import { Button, Space, Row, Col, Typography, Divider, Modal, Input } from 'antd';
-import {CheckCircleOutlined} from '@ant-design/icons'
+import { Button, Space, Row, Col, Typography, Divider, Modal, Input, Form, InputNumber, Popover } from 'antd';
+import { InfoCircleOutlined} from '@ant-design/icons';
 import moment from 'moment';
-import { firestore } from '../../firebase';
+import { firestore, functions } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import logo from '../../basicLogo.png';
-import InvoiceModal from './invoicemodal';
+
+const acceptBooking = functions.httpsCallable('acceptBooking');
 
 export default function BookingInfo(props) {
   const { user } = useContext(UserContext);
@@ -14,15 +15,32 @@ export default function BookingInfo(props) {
   const [booking, setBooking] = React.useState(null);
   const [custName, setCustName] = React.useState("");
   const [service, setService] = React.useState(null);
-  const [invoiceVisible, setInvoiceVisible] = React.useState(false);
   const [declineVisible, setDeclineVisible] = React.useState(false);
+  const [acceptVisible, setAcceptVisible] = React.useState(false);
   const [declineMessage, setDeclineMessage] = React.useState("");
   const [invoiceDisabled, setInvoiceDisabled] = React.useState(null);
-  const [invoiceSent, setInvoiceSent] = React.useState(null);
 
   const [err, setErr] = React.useState(null);
 
 const {Title, Paragraph, Text} = Typography;
+const layout = {
+  labelCol: {
+    span: 4,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
+const validateMessages = {
+  required: '${label} is required!',
+  types: {
+    email: '${label} is not valid email!',
+    number: '${label} is not a valid number!',
+  },
+  number: {
+    range: '${label} must be between ${min} and ${max}',
+  },
+};
 
   React.useEffect(() => {
     (async function () {
@@ -33,7 +51,6 @@ const {Title, Paragraph, Text} = Typography;
         const sv = await firestore.collection('users').doc(user.uid).collection('services').doc(bk.data().serviceid).get();
         setService(sv.data());
         const tempiv = await firestore.collection('tempinvoices').doc(bookingId).get();
-        setInvoiceSent(tempiv.exists);
         setInvoiceDisabled(bk.data().status==="declined" || tempiv.exists || bk.data().status==="requested" || sv.data().price===0);
 
       } 
@@ -44,11 +61,11 @@ const {Title, Paragraph, Text} = Typography;
     })();
   }, []);
 
-  async function onAccept() {
+  async function onAccept(values) {
     try {
-    await firestore.collection('users').doc(user.uid).collection('bookings').doc(bookingId).update({ status: 'accepted' })
-    setBooking({ ...booking, status: 'accepted'});
-
+    // await firestore.collection('users').doc(user.uid).collection('bookings').doc(bookingId).update({ status: 'accepted', price:values.price })
+    setBooking({ ...booking, status: 'accepted', price:values.price});
+    await acceptBooking({bid: bookingId, uid: user.uid})
     }
     catch(error) {
         console.log('Unable to update status: ', error);
@@ -76,12 +93,45 @@ const {Title, Paragraph, Text} = Typography;
 
   return (
     <div style={{ padding: 50 }}>
-      <InvoiceModal booking={booking} bookingId={bookingId} service={service} visible={invoiceVisible} onSuccess={() => setInvoiceSent(true)} closeModal={()=>setInvoiceVisible(false)}
-        footer={[
-          <Button key="cancel" onClick={() => setInvoiceVisible(false)}>
-            Cancel
-          </Button>
-        ]}/>
+        <Modal visible={acceptVisible} title="Accept Booking" onCancel={()=>setAcceptVisible(false)} footer={[]}>
+        <Form
+        {...layout}
+        name="nest-messages"
+        onFinish={onAccept}
+        size={"large"}
+        validateMessages={validateMessages}
+        initialValues={{
+          price: service.price,
+          note: ""
+        }}>
+            <Form.Item
+            name={'price'}
+            label={<div>Price <Popover content="Adjust the price if necessary, applying any discounts">
+            <InfoCircleOutlined size="small" />
+          </Popover></div>}
+            rules={[
+              {
+                required: true,
+              },
+            ]}>
+              <InputNumber
+                min={0}
+                step={5}
+                formatter={(value) =>
+                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+              />
+            </Form.Item>
+            <Form.Item labelCol={{}} wrapperCol={{ ...layout.wrapperCol, offset: 4 }}>
+              <Row>
+                <Button type="primary" htmlType="submit" style={{width:'80%'}}>
+                  Send
+                </Button>
+              </Row>
+            </Form.Item>
+          </Form>
+        </Modal>
         <Modal visible={declineVisible} title="Decline Booking" onCancel={()=>setDeclineVisible(false)}
                 footer={[
                   <Button type="primary" key="decline" onClick={onDecline}>
@@ -129,7 +179,7 @@ const {Title, Paragraph, Text} = Typography;
           {booking.status === 'requested' ? (
           <div>
             <Space size="large">
-              <Button type="primary" onClick={onAccept}>
+              <Button type="primary" onClick={setAcceptVisible}>
                 Accept
               </Button>
               <Button type="danger" onClick={() => setDeclineVisible(true)}>
@@ -166,26 +216,6 @@ const {Title, Paragraph, Text} = Typography;
           <Divider/>
         </Col>
       </Row>
-      <Row justify="center">
-          <Col span={12}>
-            <Row align="middle">
-            <Col span={12}>
-              {
-                invoiceSent ? 
-                <Row align="top" justify="center"><CheckCircleOutlined style={{color:"green", fontSize:30, paddingRight:10}} /><Title level={4}>Invoice Sent</Title></Row>
-                :
-                <Button style={{width:"50%"}}
-                type="primary"
-                disabled={invoiceDisabled}
-                onClick={()=>{setInvoiceVisible(true)}}>Send Invoice</Button>
-
-              }
-            </Col>
-
-            </Row>
-          </Col>
-        </Row>
-
     </div>
   );
 }

@@ -31,9 +31,16 @@ const validateMessages = {
 export default function EditService(props) {
   const { user } = useContext(UserContext);
   const [autoAppt, setAutoAppt] = useState(props.location.service.autoAppt);
+  const [userInfo, setUserInfo] = useState(true);
+
+  React.useEffect(() => {
+    firestore.collection('users').doc(user.uid).get().then(doc => {
+      setUserInfo(doc.data());
+    })
+  }, []);
 
   const onFinish = (values) => {
-    if(user.chargesEnabled && values.price > 0) {
+    if((userInfo.chargesEnabled && values.price>0) || values.price===0) {
       firestore
       .collection('users')
       .doc(user.uid)
