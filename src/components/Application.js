@@ -8,6 +8,7 @@ import CreateService from './service/createService';
 import EditService from './service/editService';
 import LoginScreen from './authentication/LoginScreen';
 import SignUpScreen from './authentication/SignUpScreen';
+import CustomBooking from './booking/customBooking';
 import '../App.less';
 
 export default function Application() {
@@ -24,6 +25,7 @@ export default function Application() {
         <Route path="/bookingInfo" component={bookingInfo} />
         <Route path="/newService" component={CreateService} />
         <Route path="/editService" component={EditService} />
+        <Route path="/newBooking" component={CustomBooking} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/signup" component={SignUpScreen} />
         <Route path="/login" component={LoginScreen} />

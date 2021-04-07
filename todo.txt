@@ -1,18 +1,8 @@
 
-* service creation should ask - create google drive
 
-* When google auth is created for a user, firebase function should trigger subscription to a calendar
-    -- need to write the function that consumes this subscription
-
-* When a user accepts a booking, firebase function should trigger which:
-    * adds calendar event
-    * includes meet link
-    * invites customer
-    * adds a shared google drive if that option is set
-
-
-* create a react app that defines the booking dialog
-    * when customer requests booking, firebase function wil send out email to user, link to dtail page w/ confirmation page
-
-* booking representation
-    * customer id, user id, timestamp, service, 
+USER CREATED booking
+* customBooking page where user specifies service, appt, and customer details
+* in firebase, a booking object should be created with type "offered"
+* when an offered booking is created, email should go out to customer w/ link to accept booking
+* on the linked page, customer will see details of the appt, and be able to accept / pay
+* accepting / payment should trigger the creation of event, handling of paymentIntent, and emailing user + customer

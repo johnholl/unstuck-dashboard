@@ -1,5 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Calendar, Modal, Button, Typography, Row } from 'antd';
+import { Calendar, Modal, Button, Typography, Row, Popover } from 'antd';
+import {
+  PlusOutlined,
+} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { UserContext } from '../../providers/UserProvider';
@@ -91,8 +94,15 @@ export default function Bookings() {
 
   return (
     <div style={{ padding: 50, minHeight: 360 }}>
-      <Row style={{paddingBottom:20}}>
-        <Title level={3}>Booking Calendar</Title> 
+      <Row style={{paddingBottom:20}} justify="start">
+        <Title level={3}>Booking Calendar</Title>
+        <div style={{paddingLeft:30}}>
+        <Popover content="Create a new booking."> 
+        <Link to="/newBooking">
+            <Button shape="circle" icon={<PlusOutlined style={{fontSize:24}}/>} type="primary" size="large" />
+          </Link>
+        </Popover>
+        </div>
       </Row>
       <div style={{width:"50%"}}>
         <p style={{textAlign:"left"}}>View upcoming bookings. Accepted bookings appear green, requested bookings appear orange, and declined bookings appear red. Click on a date to get more details on its bookings.</p> 
