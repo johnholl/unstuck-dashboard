@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { Typography, Row, Col, Button, TimePicker, Form, Select, Divider } from 'antd';
 import moment from 'moment-timezone';
 import { firestore } from '../../firebase';
@@ -38,6 +38,14 @@ export default function SignUpScreen3(props) {
     props.history.push('/signup/4');
   }
 
+  useEffect(() => {
+    (async function () {
+      if(!user.tz){
+        await firestore.collection('users').doc(user.uid).set({tz: moment.tz.guess()})
+      }
+    })();
+  }, []);
+  
   async function onFinish(days) {
     await Promise.all(Object.entries(days).map(async ([key, value]) => {
       if (value.range) {

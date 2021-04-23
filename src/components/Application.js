@@ -20,8 +20,6 @@ export default function Application() {
   return user ? (
     <Router>
       <div className="App">
-        {/* <Route path="/" component={Dashboard} /> */}
-        {/* <Redirect from="/dashboard" to="dashboard/bookings" /> */}
         <Route path="/bookingInfo" component={bookingInfo} />
         <Route path="/newService" component={CreateService} />
         <Route path="/editService" component={EditService} />

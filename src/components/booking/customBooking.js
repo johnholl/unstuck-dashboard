@@ -2,12 +2,12 @@ import React, { useContext, useState} from 'react';
 import {Link} from 'react-router-dom'
 import { Form, Input, InputNumber, Button, Row, Col, Typography, Select, DatePicker, Layout, notification, Spin} from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import { firestore, functions } from '../../firebase';
+import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import makeid from '../../utils/makeId';
 import logo from '../../assets/symbol_only.png';
 
-const offerBooking = functions.httpsCallable('offerBooking');
+// const offerBooking = functions.httpsCallable('offerBooking');
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -58,25 +58,29 @@ export default function CustomBooking(props) {
     setServices(sv);
   }, []);
 
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     if((userInfo.chargesEnabled || price===0 || values.price===0)) {
       setFinishing(true);
-      await offerBooking({
-          userid:user.uid,
-          duration:values.duration ? values.duration : duration,
-          price:values.price ? values.price : price,
-          customer:values.email,
-          customerName:values.name,
-          serviceName:services[values.service].name,
-          description:services[values.service].description,
-          serviceid:values.service,
-          appointment:Number(values.starttime.format('X')),
-          status:"offered",
-          key:makeid(8),
-          userInfo,
-            });
+      console.log(values);
+      console.log(makeid(8));
+      console.log(props);
+
+      // await offerBooking({
+      //     userid:user.uid,
+      //     duration:values.duration ? values.duration : duration,
+      //     price:values.price ? values.price : price,
+      //     customer:values.email,
+      //     customerName:values.name,
+      //     serviceName:services[values.service].name,
+      //     description:services[values.service].description,
+      //     serviceid:values.service,
+      //     appointment:Number(values.starttime.format('X')),
+      //     status:"offered",
+      //     key:makeid(8),
+      //     userInfo,
+      //       });
       setFinishing(false);
-      props.history.push("/dashboard/bookings");
+      // props.history.push("/dashboard/bookings");
       }
     else {
       notification.open({
@@ -186,7 +190,12 @@ export default function CustomBooking(props) {
         </Form.Item>
         {customPD ?
         <Row justify="space-around">
-        <Form.Item name="price">
+        <Form.Item name="price"
+                  rules={[
+                    {
+                      required: customPD,
+                    },
+                  ]}>
               <InputNumber
                 placeholder="price"
                 min={0}
@@ -198,7 +207,12 @@ export default function CustomBooking(props) {
                 parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
               />
         </Form.Item>
-        <Form.Item name="duration">
+        <Form.Item name="duration"
+            rules={[
+              {
+                required: customPD,
+              },
+            ]}>
             <InputNumber min={5} max={360} step={5}
              placeholder="duration in minutes"
              style={{width:'200px'}}
