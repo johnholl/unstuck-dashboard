@@ -65,22 +65,22 @@ export default function CustomBooking(props) {
       console.log(makeid(8));
       console.log(props);
 
-      // await offerBooking({
-      //     userid:user.uid,
-      //     duration:values.duration ? values.duration : duration,
-      //     price:values.price ? values.price : price,
-      //     customer:values.email,
-      //     customerName:values.name,
-      //     serviceName:services[values.service].name,
-      //     description:services[values.service].description,
-      //     serviceid:values.service,
-      //     appointment:Number(values.starttime.format('X')),
-      //     status:"offered",
-      //     key:makeid(8),
-      //     userInfo,
-      //       });
+      await offerBooking({
+          userid:user.uid,
+          duration:values.duration ? values.duration : duration,
+          price:values.price ? values.price : price,
+          customer:values.email,
+          customerName:values.name,
+          serviceName:services[values.service].name,
+          description:services[values.service].description,
+          serviceid:values.service,
+          appointment:Number(values.starttime.format('X')),
+          status:"offered",
+          key:makeid(8),
+          userInfo,
+            });
       setFinishing(false);
-      // props.history.push("/dashboard/bookings");
+      props.history.push("/dashboard/bookings");
       }
     else {
       notification.open({
