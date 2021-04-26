@@ -58,7 +58,7 @@ export default function CustomBooking(props) {
     setServices(sv);
   }, []);
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     if((userInfo.chargesEnabled || price===0 || values.price===0)) {
       setFinishing(true);
       console.log(values);
