@@ -2,12 +2,12 @@ import React, { useContext, useState} from 'react';
 import {Link} from 'react-router-dom'
 import { Form, Input, InputNumber, Button, Row, Col, Typography, Select, DatePicker, Layout, notification, Spin} from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import { firestore } from '../../firebase';
+import { firestore, functions } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import makeid from '../../utils/makeId';
 import logo from '../../assets/symbol_only.png';
 
-// const offerBooking = functions.httpsCallable('offerBooking');
+const offerBooking = functions.httpsCallable('offerBooking');
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
