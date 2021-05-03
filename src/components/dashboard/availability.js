@@ -9,7 +9,7 @@ import GoogleAuth from '../../utils/googleAuth';
 
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-const {Title} = Typography;
+const {Title, Text} = Typography;
 const { Option } = Select;
 
 const { RangePicker } = TimePicker;
@@ -120,9 +120,11 @@ export default function Availability() {
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Connect Google Calendar</Title> 
       </Row>
-      <div style={{width:"50%"}}>
-        <p style={{textAlign:"left"}}>When you connect your calendar it lets Unstuck create events, invite customers, and check your calendar for event conflicts.</p> 
-      </div>
+      <Row justify="left">
+        <Col span={12} style={{textAlign:"left", paddingBottom:30}}>
+        <Text style={{fontSize:16, color:"gray", textAlign:"left"}}>When you connect your calendar it lets Unstuck create events, invite customers, and check your calendar for event conflicts.</Text> 
+        </Col>
+      </Row>
       {authed ?
         <Row align="top" justify="center"><CheckCircleOutlined style={{color:"green", fontSize:30, paddingRight:10}} /><Title level={4}>Calendar Connected</Title></Row>
         :
@@ -142,6 +144,13 @@ export default function Availability() {
       <Divider/>
       <Row justify="right" style={{paddingBottom:20}} align="middle">
         <Title level={3}>Timezone</Title> 
+        </Row>
+        <Row justify="left">
+        <Col span={12} style={{textAlign:"left", paddingBottom:30}}>
+        <Text style={{fontSize:16, color:"gray", textAlign:"left"}}>{`Set your timezone so that there's no ambiguity when your customers book.`}</Text> 
+        </Col>
+      </Row>
+      <Row justify="center">
       <Col span={12}>
       <Select defaultValue={initialTz} onChange={(val)=>
         {setTimezone(val);
@@ -157,9 +166,11 @@ export default function Availability() {
       <Row justify="right" style={{paddingBottom:20}}>
         <Title level={3}>Weekly Availability</Title> 
       </Row>
-      <div style={{width:"50%"}}>
-        <p style={{textAlign:"left"}}>{`This will be displayed on your profile page, and we will use this weekly availability to set timeslots for your services. You can change your weekly availability at any time.`}</p> 
-      </div>
+      <Row justify="left">
+        <Col span={12} style={{textAlign:"left", paddingBottom:30}}>
+        <Text style={{fontSize:16, color:"gray", textAlign:"left"}}>{`These times will be displayed on your profile page. You can change your weekly availability at any time.`}</Text> 
+        </Col>
+      </Row>
       <Form {...layout} name="nest-messages" onFinish={onFinish}>
         {days.map((day) => 
           <Form.Item key={day} label={day} style={{ marginBottom: 0 }}>

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Calendar, Modal, Button, Typography, Row, Popover } from 'antd';
+import { Calendar, Modal, Button, Typography, Row, Col, Popover, Avatar, Divider } from 'antd';
 import {
   PlusOutlined,
 } from '@ant-design/icons';
@@ -94,19 +94,42 @@ export default function Bookings() {
 
   return (
     <div style={{ padding: 50, minHeight: 360 }}>
-      <Row style={{paddingBottom:20}} justify="start">
+      <Row style={{paddingBottom:20}} justify="start" align="middle">
         <Title level={3}>Booking Calendar</Title>
-        <div style={{paddingLeft:30}}>
+      </Row>
+      <Row justify="left">
+        <Col span={12} style={{textAlign:"left", paddingBottom:30}}>
+        <Text style={{fontSize:16, color:"gray"}}>{`View past and future bookings.`}</Text>
+        </Col>
+      </Row>
+      <Row>
+      <Col span={11}>
+      <Row gutter={[24, 24]}>
+        <Col span={12}>
+        <Row justify="start"><Avatar style={{backgroundColor:'green', verticalAlign:'middle'}} size="small"/> <div style={{paddingLeft:10}}>{"Accepted"}</div></Row>
+        </Col>
+        <Col span={12}>
+        <Row justify="start"><Avatar style={{backgroundColor:'orange', verticalAlign:'middle'}} size="small"/> <div style={{paddingLeft:10}}>{"Requested"}</div></Row>
+        </Col>
+      </Row>
+      <Row gutter={[24, 24]} justify="start">
+        <Col span={12}>
+        <Row justify="start"><Avatar style={{backgroundColor:'red', verticalAlign:'middle'}} size="small"/> <div style={{paddingLeft:10}}>{"Declined"}</div></Row>
+        </Col>
+        <Col span={12}>
+        <Row justify="start"><Avatar style={{backgroundColor:'black', verticalAlign:'middle'}} size="small"/> <div style={{paddingLeft:10}}>{"Offered"}</div></Row>
+        </Col>
+      </Row>
+      </Col>
+      <Col span={2}><Divider type="vertical" style={{height:60, borderColor:"black"}}/></Col>
+      <Col span={11}>
         <Popover content="Create a new booking."> 
-        <Link to="/newBooking">
-            <Button shape="circle" icon={<PlusOutlined style={{fontSize:24}}/>} type="primary" size="large" />
+          <Link to="/newBooking">
+            <Text style={{fontSize:20, paddingRight:10}}>Offer Booking</Text><Button shape="circle" icon={<PlusOutlined style={{fontSize:24}}/>} type="primary" size="large" />
           </Link>
         </Popover>
-        </div>
+      </Col>
       </Row>
-      <div style={{width:"50%"}}>
-        <p style={{textAlign:"left"}}>View upcoming bookings. Accepted bookings appear green, requested bookings appear orange, and declined bookings appear red. Click on a date to get more details on its bookings.</p> 
-      </div>
       <Calendar onSelect={onChange} dateCellRender={dateCellRender} />
       <Modal
         title={selectedDate.format("MM/DD/YYYY")}

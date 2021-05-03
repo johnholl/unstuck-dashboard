@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import { Button, List, Divider, Col, Row, Modal, Typography,   ConfigProvider} from 'antd';
+import { Button, Col, Row, Modal, Typography, Card, Popover} from 'antd';
 import { Link } from 'react-router-dom';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 
-const {Title} = Typography;
+const {Title, Text} = Typography;
 
 export default function Services() {
   const [services, setServices] = React.useState([]);
@@ -30,12 +30,6 @@ export default function Services() {
       setLoaded(true);
     })();
   }, []);
-
-  const renderEmpty = () => (
-    <div style={{ textAlign: 'center' }}>
-      <p>No Services</p>
-    </div>
-  );
 
   const onDelete = () => {
     const sid = deleteService;
@@ -64,11 +58,16 @@ export default function Services() {
     <Row justify="right" style={{paddingBottom:20}}>
       <Title level={3}>Manage Your Services</Title> 
     </Row>
+    <Row justify="left">
+        <Col span={12} style={{textAlign:"left"}}>
+        <Text style={{fontSize:16, color:"gray"}}>{`Create any number of services to offer to your customers.`}</Text>
+        </Col>
+      </Row>
     <div style={{width:"50%"}}>
-        <p style={{textAlign:"left"}}>{`A service is a type of appointment. You can set a service's price, duration, and other details. Most service providers offer between two and four services.`} </p> 
     </div>
     <Row justify="center">
       <Modal
+        closable={false}
         title="Delete service"
         visible={visible}
         footer={[
@@ -82,55 +81,47 @@ export default function Services() {
       >
         <p>Are you sure you want to delete this service?</p>
       </Modal>
+      </Row>
 
-      <Col span={18}>
         <div style={{ padding: 24, minHeight: 360 }}>
-          <ConfigProvider renderEmpty={renderEmpty}>
-          <List
-            itemLayout="vertical"
-            dataSource={services}
-            renderItem={(service) => (
-              <Row justify="center">
-              <div style={{width:400}}>
-                <List.Item
-                  actions={[
-                    <Link
-                      key="link"
-                      to={{
-                        pathname: '/editService',
-                        service,
-                      }}
-                    >
-                      edit
-                    </Link>,
-                    <Button
-                      key="button"
-                      type="link"
-                      onClick={() => openModal(service.id)}
-                    >
-                      delete
-                    </Button>,
-                  ]}
-                >
-                  <List.Item.Meta
-                    title={service.name}
-                    description={service.description}
-                  />
-                  <Title level={5}>{service.duration + ' minutes'}</Title>
-                  <Title level={5} >{'$' + service.price}</Title>
-                </List.Item>
-                <Divider />
-              </div>
-              </Row>
-            )}
-          ></List>
-          </ConfigProvider>
+          <Row gutter={[16, 16]}>
+          {Object.entries(services).map((service) => (
+              <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24} type="flex" key={service.id}>
+                    <Card title={service[1].name} 
+                    style={{backgroundColor:"white", position:"relative", borderColor:"darkgray", textAlign:"left"}} >
+                      <Row justify="space-between">
+                        <Col span={12}>
+                        <Row>
+                        <Popover content={<div style={{width:"300px"}}>{service[1].description}</div>} trigger="click"> 
+                        <p style={{height:"30px", textOverflow:"ellipsis", overflow:"hidden", whiteSpace:"nowrap"}}>{service[1].description}</p>
+                        </Popover>
+                        </Row>
+                        <Row>
+                          <Col span={12}>
+                          <p>{service[1].duration + " minutes"}</p>
+                          </Col>
+                          <Col span={12}>
+                          <p>{"$" + service[1].price}</p>
+                          </Col>
+                        </Row>
+                        </Col>
+                        <Col>
+                        <Row justify="center">
+                        <Link to={{pathname: '/editService', service,}}>edit</Link>
+                        </Row>
+                        <Row justify="end">
+                        <Button type="link" onClick={() => openModal(service.id)}>delete</Button>
+                        </Row>
+                        </Col>
+                      </Row>
+                        </Card>
+              </Col>
+            ))}
+          </Row>
           <Link to="/newService">
-            <Button type="primary">CREATE A NEW SERVICE</Button>
+            <Button type="primary">NEW SERVICE</Button>
           </Link>
         </div>
-      </Col>
-    </Row>
     </div>
   );
 }
