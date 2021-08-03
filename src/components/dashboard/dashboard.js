@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Route, Link } from 'react-router-dom';
-import { Layout, Menu, Button, Modal, Typography, Row, Tooltip, Col, Image, Dropdown, Badge, Divider } from 'antd';
+import { Layout, Menu, Button, Modal, Typography, Row, Tooltip, Col, Dropdown, Badge, Divider } from 'antd';
 import {
   UserOutlined,
   ClockCircleOutlined,
@@ -16,6 +16,7 @@ import '../../styles/dashboard.css';
 import { auth, firestore } from '../../firebase';
 import logo from '../../assets/unstuckwhitepng.png';
 import { UserContext } from '../../providers/UserProvider';
+import { astronautUrl, bookingUrl, landingUrl } from '../../urls';
 import Profile from './profile';
 import Bookings from './bookings';
 import Services from './services';
@@ -119,19 +120,19 @@ export default function Dashboard(props) {
           <Col span={8}>
           <Row justify={"space-between"}>
               <Col span={7}>
-              <a target="_self" rel="noreferrer" href={'https://booking.beunstuck.me/profile/' + user.uid}>
+              <a target="_self" rel="noreferrer" href={bookingUrl + 'profile/' + user.uid}>
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Profile</Text>
                     </a>
                 </Col>
                 <Col span={1}><Divider type="vertical" style={{backgroundColor:"white"}}/></Col>
                 <Col span={7}>
-                    <a target="_self" rel="noreferrer" href={'https://beunstuck.me/faq'}>
+                    <a target="_self" rel="noreferrer" href={landingUrl + 'faq'}>
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>Docs</Text>
                     </a>
                 </Col>
                 <Col span={1}><Divider type="vertical" style={{backgroundColor:"white"}}/></Col>
                 <Col span={7}>
-                    <a target="_self" rel="noreferrer" href={'https://beunstuck.me/'}>
+                    <a target="_self" rel="noreferrer" href={landingUrl}>
                         <Text style={{fontWeight:"bold", fontSize:14, color:"white"}}>beunstuck.me</Text>
                     </a>
                 </Col>
@@ -181,9 +182,9 @@ export default function Dashboard(props) {
               <Text strong>finances</Text>
             </Menu.Item>
           </Menu>
-            <Image width="100%" 
-            src="https://firebasestorage.googleapis.com/v0/b/unstuck-backend.appspot.com/o/undraw_Astronaut_re_8c33.svg?alt=media&token=cef7909c-6a16-4e04-9ece-e0265cfba3c8" 
-            style={{position:"absolute", bottom:"0", left:"0"}}/>
+            <img
+            src={astronautUrl} 
+            style={{position:"absolute", bottom:"0", left:"0", width:"100%"}}/>
         </Sider>
         <Content style={{ margin: '24px 16px 0' }}>
           <Route path="/dashboard/profile" component={Profile} />

@@ -4,6 +4,7 @@ import {GoogleOutlined} from '@ant-design/icons';
 import { auth, googleAuthProvider } from '../../firebase';
 import { UserContext } from '../../providers/UserProvider';
 import logo from '../../unstuck.png';
+import { dashboardUrl } from '../../urls';
 
 const {Title} = Typography;
 
@@ -44,7 +45,7 @@ export default function LoginScreen(props) {
                         </Button>
                     </Row>
                     <Row justify="center">
-                        <font>{"Don't have an account? Sign up "}<a href="https://dashboard.beunstuck.me/signup/1"><u>{"here"}</u></a></font>
+                        <font>{"Don't have an account? Sign up "}<a href={dashboardUrl + "signup/1"}><u>{"here"}</u></a></font>
                     </Row>
                 </Col> 
         </Row>

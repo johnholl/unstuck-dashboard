@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Input, Row, Col, Typography, Divider} from 'antd';
 import { UserContext } from '../../providers/UserProvider';
-import {bookingUrl} from '../../constants';
+import {bookingUrl} from '../../urls';
 
 
 const {Paragraph, Title, Text} = Typography;
@@ -50,7 +50,7 @@ export default function Share() {
           </Row>
           <Paragraph>
             <pre>
-              {`<p><a target="_top" style=" background-color: #722ed1; color: white; height: 40px; text-transform: uppercase; font-family: 'helvetica neue', helvetica, arial, sans-serif; letter-spacing: 1px; line-height: 38px; padding: 0 28px; border-radius: 3px; font-weight: 500; font-size: 14px; cursor: pointer; display: inline-block; " href="https://booking.beunstuck.me/booking/${user.uid}/serviceSelect/" rel="nofollow noopener noreferrer">${buttonText}</a></p>`}
+              {`<p><a target="_top" style=" background-color: #722ed1; color: white; height: 40px; text-transform: uppercase; font-family: 'helvetica neue', helvetica, arial, sans-serif; letter-spacing: 1px; line-height: 38px; padding: 0 28px; border-radius: 3px; font-weight: 500; font-size: 14px; cursor: pointer; display: inline-block; " href="${bookingUrl}booking/${user.uid}/serviceSelect/" rel="nofollow noopener noreferrer">${buttonText}</a></p>`}
             </pre>
           </Paragraph>
         </Col>
@@ -61,7 +61,7 @@ export default function Share() {
       </Row>
         <Row gutter={[16]} justify="start">
                 <p style={{textAlign:"right", fontWeight:'700'}}>profile page: </p>
-                <div style={{paddingLeft:10}}><a href={`${bookingUrl}/booking/${user.uid}/serviceSelect/`}>{`https://booking.beunstuck.me/profile/${user.uid}/`}</a></div>
+                <div style={{paddingLeft:10}}><a href={`${bookingUrl}/booking/${user.uid}/serviceSelect/`}>{`${bookingUrl}profile/${user.uid}/`}</a></div>
         </Row>
         <Row gutter={[16]} justify="start">
             <p style={{fontWeight:'700'}}>service page: </p>

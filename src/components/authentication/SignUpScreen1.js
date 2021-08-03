@@ -3,6 +3,7 @@ import { Button, Typography, Row, Col } from 'antd';
 import {GoogleOutlined} from '@ant-design/icons';
 import { UserContext } from '../../providers/UserProvider';
 import { auth, googleAuthProvider, firestore} from '../../firebase';
+import { landingUrl } from '../../urls';
 
 // const layout = {
 //     labelCol: {
@@ -47,9 +48,9 @@ export default function SignUpScreen1(props) {
                         </Button>
                     </Row>
                     <Row justify="center">
-                        By continuing, you’re agreeing to our <a href="https://beunstuck.me/privacy-policy-2/">Customer Terms of Service</a>
+                        By continuing, you’re agreeing to our <a href={landingUrl + "privacy-policy-2/"}>Customer Terms of Service</a>
                          &nbsp; and
-                         <a href="https://beunstuck.me/%E2%80%8Dterms-of-use/">Privacy Policy</a>.
+                         <a href={landingUrl + "%E2%80%8Dterms-of-use/"}>Privacy Policy</a>.
                     </Row>
                 </Col>
             </Row>
